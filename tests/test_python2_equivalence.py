@@ -76,12 +76,17 @@ class Python2EquivalenceTest(unittest.TestCase):
 
                 first = work / f"{label}-SRR031716"
                 second = work / f"{label}-SRR031708"
+                for sample in (first, second):
+                    run("intron_exon_jctn_counts.py", "-b", str(first) + "_junctions.bed",
+                        "-a", str(sample) + "_genome_reads.txt.gz", "--out_dir", str(work),
+                        "--out_prefix", sample.name, "-l", "37", "-f", "31", "-o", "3")
                 prefix = work / (label + "-events")
                 run("getASEventReadCounts.py", "--jcn1", str(first) + "_junctions.bed",
                     "--jcn2", str(second) + "_junctions.bed",
                     "--genome_reads1", str(first) + "_genome_reads.txt.gz",
                     "--genome_reads2", str(second) + "_genome_reads.txt.gz",
-                    "--ie1", os.devnull, "--ie2", os.devnull,
+                    "--ie1", str(first) + "_intron_exon_junction_counts.txt",
+                    "--ie2", str(second) + "_intron_exon_junction_counts.txt",
                     "--sqlite_db_dir", str(work), "--txt_db1", database, "--txt_db2", database,
                     "--jcn_seq_len", "62", "--keep_intermediate", "-p", str(prefix))
                 if label == "py3":
@@ -130,12 +135,16 @@ class Python2EquivalenceTest(unittest.TestCase):
                     expected_normalized = Path(str(tables_prefix) + "_AS_exclusion_inclusion_counts_lenNorm.txt")
                     self.assertEqual(sorted(expected_normalized.read_text().splitlines()),
                                      sorted(normalized.read_text().splitlines()))
-                outputs.append((annotation_rows, junctions, genome_reads, events, statistics, table))
+                boundary_counts = [sorted(Path(str(sample) + "_intron_exon_junction_counts.txt")
+                                          .read_text().splitlines()) for sample in (first, second)]
+                outputs.append((annotation_rows, junctions, genome_reads, events, statistics, table,
+                                boundary_counts))
 
             self.assertTrue(outputs[0][3], "The real-data event comparison must not be empty")
             event_types = {line.split("\t")[1] for line in outputs[0][3]}
             self.assertTrue({"cassette", "intron_retention"}.issubset(event_types))
             self.assertGreater(len(outputs[0][5]), 1, "The aggregated count table must contain events")
+            self.assertTrue(outputs[0][6][0], "The boundary-count comparison must not be empty")
             self.assertEqual(outputs[0], outputs[1])
 
 

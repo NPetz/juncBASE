@@ -23,8 +23,9 @@ identical junction tables and identical decompressed genome-read data.
 The opt-in `tests/test_python2_equivalence.py` compares real BAM extracts at
 roX2 and dre4 (SRR031716 paired-end and SRR031708 single-end) and FlyBase
 r6.69 exon records. It checks annotation rows, junction and genome-read
-outputs, 12 event records and counts (cassette exons and intron retention),
-Fisher-test output, and a non-empty aggregated count table. It also checks the
+outputs, exon–intron boundary counts, event records and counts (cassette exons
+and intron retention), Fisher-test output, and a non-empty aggregated count
+table. It also checks the
 updated cluster script against raw and normalized current-format count tables.
 The aggregation
 smoke test duplicates the same generated event table under two sample labels;
@@ -33,9 +34,10 @@ The test normalizes the annotation's
 chromosome prefix and attribute order for the original parser. Because the old
 `pysqlite2` package could not be built in the reference environment, its
 temporary Python 2 checkout uses Python 2's `sqlite3` in place of that import.
-Both intron-boundary inputs are empty; this comparison is not a differential
-splicing analysis or a full validation of retention counting, paired-end
-fragment handling, or all event types. Ordering of event records is ignored.
+The boundary counts are generated from the same real BAM extracts. This
+comparison is not a differential splicing analysis or a full validation of
+retention counting, paired-end fragment handling, or all event types.
+Ordering of event and junction records is ignored.
 
 To run the cross-version test, set `JUNCBASE_PY2_ROOT` and
 `JUNCBASE_PY2_PYTHON` to an independently prepared reference checkout and

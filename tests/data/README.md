@@ -9,8 +9,8 @@ reference. Each includes alignments overlapping `3L:1871574-1876312` and
 SRR031708 is single-end. The names and mate flags are preserved; the extracts
 are not intended as complete read-pair datasets.
 
-The cross-version test supplies empty intron-boundary inputs, so it is a
-software regression check, not evidence of differential intron retention or
-correct fragment-level counting. The GTF contig names and attribute order are
+The cross-version test calculates intron-boundary counts from the extracts,
+but is a software regression check, not evidence of differential intron
+retention or correct fragment-level counting. The GTF contig names and attribute order are
 transformed in the test so both versions receive identical, upstream-compatible
 inputs; these changes do not alter the original coordinates.

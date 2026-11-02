@@ -13,6 +13,7 @@ import sys
 import optparse 
 import pdb
 import random
+import subprocess
 
 from helperFunctions import runCmd,updateDictOfLists
 from getASEventReadCounts import convertCoordStr
@@ -249,7 +250,7 @@ def main():
                                                                           out_read_assoc_file)
     print(cmd)
 #    runCmd(cmd, SHELL)
-    os.system(cmd)
+    subprocess.run(cmd, shell=True, check=True)
 
     # Remove the tmp file
 #    runCmd("rm %stmp%d.txt" % (out_dir, rand_num), SHELL)
