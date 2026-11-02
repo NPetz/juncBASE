@@ -13,6 +13,8 @@ import sys
 import optparse 
 import pdb
 import os
+from createAS_CountTables import getIRKeyandCounts as get_current_ir_counts
+from createAS_CountTables import getKeyandCount as get_current_event_counts
 #############
 # CONSTANTS #
 #############
@@ -38,7 +40,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -118,6 +120,8 @@ def main():
                                   done on the counts. Used for splitting the IR
                                   counts back into left and right counts""",
                           default=False)
+    opt_parser.add_option("--jcn_seq_len", type="int", default=None,
+                          help="Junction sequence length; required with --lengthNorm.")
     opt_parser.add_option("--which_chr",
                           dest="which_chr",
                           type="string",
@@ -140,7 +144,7 @@ def main():
     if os.path.exists(root_dir):		
         root_dir = os.path.abspath(root_dir)
     else:
-        print "Root directory does not exist: %s" % root_dir
+        print("Root directory does not exist: %s" % root_dir)
         opt_parser.print_help()
         sys.exit(1)
 
@@ -162,6 +166,8 @@ def main():
 
     # Will equal none if no length normalization occurred
     lengthNorm = options.lengthNorm
+    if lengthNorm and (options.jcn_seq_len is None or options.jcn_seq_len <= 0):
+        opt_parser.error("--jcn_seq_len must be a positive integer when using --lengthNorm")
 
     # {event:sample:(excl, incl)}
     event2sample2counts = {}
@@ -185,14 +191,14 @@ def main():
     for line in first_file:
         line = formatLine(line)
 
-        event_key, count_str, genes, strand = getKeyandCount(line)
+        event_key, count_str, genes, strand = getKeyandCount(line, lengthNorm)
 
         event2sample2counts[event_key] = {first_sample:count_str}
         
         updateGeneStrand(event2genesStrand, event_key, genes, strand)
 
         if "intron_retention" in line:
-            left_count_str, right_count_str = getIRKeyandCounts(line, lengthNorm)
+            left_count_str, right_count_str = getIRKeyandCounts(line, lengthNorm, options.jcn_seq_len)
             left_intron2sample2counts[event_key] = {first_sample:left_count_str}
             right_intron2sample2counts[event_key] = {first_sample:right_count_str}
 
@@ -208,11 +214,11 @@ def main():
         for line in samp_file:
             line = formatLine(line)
 
-            event_key, count_str, genes, strand = getKeyandCount(line)
+            event_key, count_str, genes, strand = getKeyandCount(line, lengthNorm)
         
             if event_key not in event2sample2counts:
-                print "Event from sample, not in dict: %s, %s" % (samp,
-                                                                  event_key)
+                print("Event from sample, not in dict: %s, %s" % (samp,
+                                                                  event_key))
                 continue
 
             event2sample2counts[event_key][samp] = count_str
@@ -220,7 +226,7 @@ def main():
             updateGeneStrand(event2genesStrand, event_key, genes, strand)
         
             if "intron_retention" in line:
-                left_count_str, right_count_str = getIRKeyandCounts(line, lengthNorm)
+                left_count_str, right_count_str = getIRKeyandCounts(line, lengthNorm, options.jcn_seq_len)
                 left_intron2sample2counts[event_key][samp] = left_count_str
                 right_intron2sample2counts[event_key][samp] = right_count_str
 
@@ -265,7 +271,7 @@ def main():
 
         out_key = getOutKey(event_key, 
                             event2genesStrand[event_key][0],
-                            event2genesStrand[event_key][1],
+                            event2genesStrand[event_key][1])
 
         outline = "%s\t%s\n" % (out_key, 
                                 "\t".join(counts_list))
@@ -378,54 +384,12 @@ def formatLine(line):
     line = line.replace("\n","")
     return line
 
-def getKeyandCount(line):
-    line_list = line.split("\t")
+def getKeyandCount(line, lengthNorm):
+    event_key, raw_counts, normalized_counts, genes, strand, const_region = get_current_event_counts(line)
+    return event_key + "\t" + const_region, normalized_counts if lengthNorm else raw_counts, genes, strand
 
-    event_key_list = line_list[0:1] + line_list[2:3] + line_list[4:5] + line_list[6:12]
-    event_key = "\t".join(event_key_list)
-
-    genes = line_list[3].split(",")
-    strand = line_list[5]
-
-    excl_count = line_list[-2]
-    incl_count = line_list[-1] 
-    
-    count_str = "%s;%s" % (excl_count, incl_count)
-
-    if "-" in count_str:
-        print "Negative value in %s" % line
-        count_str = "0;0"
-
-    return event_key, count_str, genes, strand
-
-def getIRKeyandCounts(line, lengthNorm):
-    """ 
-    Returns excl;incl pairs for the left side and then the right side
-    """
-
-    line_list = line.split("\t")
-
-    excl_count = line_list[-2]
-
-    left_right_incl_cts = line_list[29] 
-
-    left_incl_count, right_incl_count = left_right_incl_cts.split(";")
-
-    if lengthNorm:
-        # If length normalization occurred, both the left and right side was
-        # normalized by the total length of inclusion isoform. Since I am
-        # decoupling the left and right side, the length will be just one
-        # junction.
-        left_incl_count = int(left_incl_count)*2
-        right_incl_count = int(right_incl_count)*2
-    
-        left_count_str = "%s;%d" % (excl_count, left_incl_count)
-        right_count_str = "%s;%d" % (excl_count, right_incl_count)
-    else:
-        left_count_str = "%s;%s" % (excl_count, left_incl_count)
-        right_count_str = "%s;%s" % (excl_count, right_incl_count)
-
-    return left_count_str, right_count_str
+def getIRKeyandCounts(line, lengthNorm, jcn_seq_len):
+    return get_current_ir_counts(line, jcn_seq_len, lengthNorm)
 
 def getOutKey(event_key, genes, strand):
     """
@@ -445,7 +409,7 @@ def getPSI(excl_incl_ct_str):
         excl = float(excl_str)
         incl = float(incl_str)
     except:
-        print "Warning:Bad PSI value"
+        print("Warning:Bad PSI value")
         return NA
 
     if excl + incl == 0:
@@ -465,7 +429,7 @@ def hasInclusionCounts(event_key,
 
     for samp in left_intron2sample2counts[event_key]:
         count_str = left_intron2sample2counts[event_key][samp]
-        excl_ct, incl_ct = map(int,count_str.split(";"))
+        excl_ct, incl_ct = list(map(int,count_str.split(";")))
 
         if incl_ct > 0:
             leftHasInclusion = True
@@ -473,7 +437,7 @@ def hasInclusionCounts(event_key,
 
     for samp in right_intron2sample2counts[event_key]:
         count_str = right_intron2sample2counts[event_key][samp]
-        excl_ct, incl_ct = map(int,count_str.split(";"))
+        excl_ct, incl_ct = list(map(int,count_str.split(";")))
 
         if incl_ct > 0:
             rightHasInclusion = True
@@ -492,10 +456,9 @@ def updateGeneStrand(event2genesStrand, event_key, genes, strand):
         this_strand = event2genesStrand[event_key][1]
         if this_strand != strand:
             event2genesStrand[event_key][1] = "."
-    else:
+    except KeyError:
         # Key does not exist
-        event2genesStrand[event_key] = (set([]),
-                                       strand)
+        event2genesStrand[event_key] = [set([]), strand]
             
     genes2update = []
     for gene in genes:

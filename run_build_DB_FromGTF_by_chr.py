@@ -17,7 +17,6 @@ from subprocess import Popen
 
 from pysqlite_wrap import DB
 from helperFunctions import updateDictOfLists, runCmd
-from broad_helperFunctions import runLSF
 
 #############
 # CONSTANTS #
@@ -269,6 +268,8 @@ def main():
 
 
         if run_lsf:
+            from broad_helperFunctions import runLSF
+
             runLSF(cmd,
                    "%s.build_DB.bsub.out" % this_chr,
                    this_chr + "build_DB",

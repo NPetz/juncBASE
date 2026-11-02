@@ -14,7 +14,6 @@ import os
 import pdb
 
 from subprocess import Popen
-from broad_helperFunctions import runLSF
 
 from createPseudoSample import getChr
 #############
@@ -92,6 +91,8 @@ def main():
                                   done on the counts. Used for splitting the IR
                                   counts back into left and right counts""",
                           default=False)
+    opt_parser.add_option("--jcn_seq_len", type="int", default=None,
+                          help="Junction sequence length; required with --lengthNorm.")
     opt_parser.add_option("--num_processes",
                           dest="num_processes",
                           type="int",
@@ -121,6 +122,8 @@ def main():
     samples = options.samples
 
     lengthNorm = options.lengthNorm
+    if lengthNorm and (options.jcn_seq_len is None or options.jcn_seq_len <= 0):
+        opt_parser.error("--jcn_seq_len must be a positive integer when using --lengthNorm")
 
     num_processes = options.num_processes
     run_lsf = options.run_lsf
@@ -139,11 +142,13 @@ def main():
         cmd += "-s %s " % samples
 
         if lengthNorm:
-            cmd += "--lengthNorm "
+            cmd += "--lengthNorm --jcn_seq_len %d " % options.jcn_seq_len
 
         cmd += "--which_chr %s" % this_chr
 
         if run_lsf:
+            from broad_helperFunctions import runLSF
+
             runLSF(cmd,
                    "%s.clusterASExons2.bsub.out" % this_chr,
                    samples.replace(",","-") + "_" + this_chr,

@@ -42,7 +42,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -126,7 +126,7 @@ def main():
 
     out_dir = formatDir(options.out_dir)
     if not os.path.exists(out_dir):
-        print "Output directory does not exist: %s" % out_dir
+        print("Output directory does not exist: %s" % out_dir)
         opt_parser.print_help()
         sys.exit(1)
 
@@ -162,12 +162,12 @@ def main():
         try:
             if os.path.getsize(subdir + "/transcripts.gtf") == 0:
                 if check:
-                    print "Need to run %s" % s_id
+                    print("Need to run %s" % s_id)
             else:
                 file_is_present = True
         except: # File doesn't exist
             if check:
-                print "Need to run %s" % s_id
+                print("Need to run %s" % s_id)
 
         if check:
             continue
@@ -191,19 +191,19 @@ def main():
                 cmd = "nice " + cmd
 
             if print_cmd:
-                print cmd
+                print(cmd)
                 continue
 
             if ctr % num_processes == 0:
-                print cmd
+                print(cmd)
                 os.system(cmd)
             else:
-                print cmd
+                print(cmd)
                 Popen(cmd, shell=True, executable=SHELL)
         else:
 
             if print_cmd:
-                print cmd
+                print(cmd)
                 continue
 
             tmp_file = "%s/tmp_cuff_%s.txt" % (os.curdir,

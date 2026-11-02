@@ -22,6 +22,7 @@ import pdb
 import os
 import profile
 import pickle
+import subprocess
 
 from helperFunctions import updateDictOfLists, updateDictOfSets, coordsOverlap, runCmd
 from coord_helperFunctions import getSearchTree, hasOuterContainer, findInternalCoords, hasOverlap
@@ -821,7 +822,7 @@ def main():
                                                     mapped_file1_name) 
                                 
             print("Running: %s" % first_cmd)
-            os.system(first_cmd)
+            subprocess.run(first_cmd, shell=True, check=True)
         else:
             mapped_file1_name = coord_counts1
 
@@ -838,7 +839,7 @@ def main():
                                                      mapped_file2_name) 
                                 
             print("Running: %s" % second_cmd)
-            os.system(second_cmd)
+            subprocess.run(second_cmd, shell=True, check=True)
 
         else:
             mapped_file2_name = coord_counts2
@@ -962,7 +963,7 @@ def main():
 #               cmd += "--host %s --user %s --passwd %s" % (options.host,
 #                                                           options.user,
 #                                                           options.passwd)
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
 
         # Add constitutive counts to IR events
         if options.prefix:
@@ -994,7 +995,7 @@ def main():
 
             if os.path.exists(ir_file):
                 cmd = "cat %s >> %s" % (ir_file, main_file)
-                os.system(cmd)
+                subprocess.run(cmd, shell=True, check=True)
 
     # Sum Totals for inclusion and exclusion isoforms in all_AS_event_info
     # and adjust for paired end counting
