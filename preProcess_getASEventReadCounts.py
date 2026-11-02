@@ -106,7 +106,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -151,30 +151,30 @@ class JcnInfo:
             chr = "chr" + chr
 
         if self.name != name:
-            print "Not the same name of the junctions: %s, %s" % (self.name,
-                                                                  name)
+            print("Not the same name of the junctions: %s, %s" % (self.name,
+                                                                  name))
             sys.exit(1)
         if self.chr != chr:
-            print "Error with chromosome: %s, %s" % (self.name, name)
+            print("Error with chromosome: %s, %s" % (self.name, name))
             sys.exit(1)
         
         if self.strand != strand:
-            print "Warning: Junction reads aligning to both strands: %s. Setting strand=." % self.name
+            print("Warning: Junction reads aligning to both strands: %s. Setting strand=." % self.name)
             self.strand = "."
 
         if self.intron_start != intron_start:
-            print "Error with intron start: %d, %d" % (self.intron_start, intron_start)
+            print("Error with intron start: %d, %d" % (self.intron_start, intron_start))
             sys.exit(1)
         if self.intron_end != intron_end:
-            print "Error with intron end: %d, %d" % (self.intron_end, intron_end)
+            print("Error with intron end: %d, %d" % (self.intron_end, intron_end))
             sys.exit(1)
 
         # Check blocks start
         if (self.rightmost_end - self.longest_second_block) != (chromEnd - second_block):
-            print "Error with second block in %s, %s" % (self.name, name)
+            print("Error with second block in %s, %s" % (self.name, name))
             sys.exit(1)
         if (self.leftmost_start + self.longest_first_block) != (chromStart + first_block):
-            print "Error with first block %s, %s" % (self.name, name)
+            print("Error with first block %s, %s" % (self.name, name))
             sys.exit(1)
 
         if chromStart < self.leftmost_start:
@@ -276,7 +276,7 @@ def main():
             sam_files.append(pysam.Samfile(sam_file, "rb"))
     #        sam_file = gzip.open(options.sam_file)
         else:
-            print "Error in -s: Expecting .sam or .bam file."
+            print("Error in -s: Expecting .sam or .bam file.")
             opt_parser.print_help() 
             sys.exit(1)
 
@@ -297,7 +297,7 @@ def main():
     if not os.path.exists(out_dir):
         os.mkdir(out_dir)
         out_dir = os.path.abspath(out_dir)
-        print "Creating output directory: %s" % out_dir
+        print("Creating output directory: %s" % out_dir)
     else:
         out_dir = os.path.abspath(out_dir)
     
@@ -312,7 +312,7 @@ def main():
     junction_bed_file_name = "%s%s_junctions.bed" % (out_dir, name)
     junction_bed_file = open(junction_bed_file_name, "w")
     genome_file_name = "%s%s_genome_reads.txt.gz" % (out_dir, name)
-    genome_file = gzip.open(genome_file_name, "wb")
+    genome_file = gzip.open(genome_file_name, "wt")
 
     # Paired-end reads exist.
     if paired_end_exists:
@@ -339,7 +339,7 @@ def main():
 
     truncation_warn = False
 
-    print "Parsing SAM file"
+    print("Parsing SAM file")
     for sam_file in sam_files:
         for line in sam_file:
             if options.sam_file.endswith(".bam"):
@@ -357,7 +357,7 @@ def main():
             sam_elems = line.split("\t")
 
             if len(sam_elems) < 11:
-                print "Error in SAM file: Expecting at least 11 columns in SAM file."
+                print("Error in SAM file: Expecting at least 11 columns in SAM file.")
                 sys.exit(1)
 
             q_name = sam_elems[0]
@@ -384,7 +384,7 @@ def main():
             if unique_only:
                 isMultiFlag = isMultiMapped(tags)
                 if isMultiFlag is None:
-                    print "Could not find tag for %s" % q_name
+                    print("Could not find tag for %s" % q_name)
                     continue
 
                 if isMultiFlag:
@@ -395,28 +395,28 @@ def main():
             i_count = cigar.count("I")
             if i_count > 0:
                 if not insertionFlag:
-                    print "Not supporting insertions, yet e.g., %s" % cigar
+                    print("Not supporting insertions, yet e.g., %s" % cigar)
                 insertionFlag = True
                 continue
        
             d_count = cigar.count("D")
             if d_count > 0:
                 if not deletionFlag:
-                    print "Not supporting deletions, yet e.g., %s" % cigar
+                    print("Not supporting deletions, yet e.g., %s" % cigar)
                 deletionFlag = True
                 continue
         
             s_count = cigar.count("S")
             if s_count > 0:
                 if not softclipFlag:
-                    print "Not supporting softclipping, yet e.g., %s" % cigar
+                    print("Not supporting softclipping, yet e.g., %s" % cigar)
                 softclipFlag = True
                 continue
 
             h_count = cigar.count("H")
             if h_count > 0:
                 if not hardclipFlag:
-                    print "Not supporting hardclipping, yet e.g., %s" % cigar
+                    print("Not supporting hardclipping, yet e.g., %s" % cigar)
                 hardclipFlag = True
                 continue
 
@@ -427,8 +427,8 @@ def main():
        
                 if read_len: 
                     if this_read_len != read_len:
-                        print "Expecting reads of length: %d" % read_len
-                        print line
+                        print("Expecting reads of length: %d" % read_len)
+                        print(line)
                         sys.exit(1)
 
                 chr_end = chr_start + this_read_len - 1
@@ -447,7 +447,7 @@ def main():
 
 
                 if n_count == 0:
-                    print "Expecting a junction read: %s" % cigar
+                    print("Expecting a junction read: %s" % cigar)
                     continue
 
                 n_split = cigar.split("N")
@@ -463,7 +463,7 @@ def main():
 
                 # Get first intron information which also will be used for the
                 # upstream length
-                upstr_len, intron_len = map(int, n_split.pop(0).split("M"))
+                upstr_len, intron_len = list(map(int, n_split.pop(0).split("M")))
                 introns_info.append((chr_start, intron_len, None))
                 # Updating the chr_start
                 chr_start = chr_start + upstr_len + intron_len   
@@ -472,7 +472,7 @@ def main():
                 # any
                 # 3rd element is used in calculating entropy
                 for remaining_intron in n_split:
-                    exon_len, intron_len = map(int, remaining_intron.split("M"))
+                    exon_len, intron_len = list(map(int, remaining_intron.split("M")))
                     introns_info.append((chr_start + exon_len - upstr_len,
                                          intron_len,
                                          chr_start - first_chr_start))
@@ -487,14 +487,14 @@ def main():
                             jcn_tag = jcn_tag[:MAX_CHAR]
                             if not truncation_warn:
                                 truncation_warn = True 
-                                print "Warning: Y0 tags truncated to %d characters." % MAX_CHAR
+                                print("Warning: Y0 tags truncated to %d characters." % MAX_CHAR)
 
                     if tag.startswith("XS"):
                         tag, almost_strand = tag.split("A")
                         jcn_strand = almost_strand.lstrip(":")
 
                         if jcn_strand != "+" and jcn_strand != "-" and jcn_strand != ".":
-                            print "Error in strand information for: %s" % line
+                            print("Error in strand information for: %s" % line)
                             sys.exit(1)
 
                 # Now insert all introns into jcn dictionary.
@@ -571,7 +571,7 @@ def main():
         paired_end_genome_file.close()
 
     # Done processing all SAM lines, now make junction BED file
-    print "Making Junction BED File"
+    print("Making Junction BED File")
     bed_header = "track name=\"%s_jcn_counts\" itemRgb=\"On\" useScore=1\n" % name
     junction_bed_file.write(bed_header)
     confident_jcns = set([])
@@ -713,7 +713,7 @@ def getForcedJunctions(forced_junction_file):
 
         # Slicing list in case strand is included in the file
         if len(lineList) < 3:
-            print "Problem with forced junction file. Needs to be tab-delimited: chr start end"
+            print("Problem with forced junction file. Needs to be tab-delimited: chr start end")
             sys.exit(1)
 
         if not lineList[0].startswith("chr"):
