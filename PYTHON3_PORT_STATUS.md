@@ -44,6 +44,9 @@ To run the cross-version test, set `JUNCBASE_PY2_ROOT` and
 Python 2 environment, respectively, and run `python -m unittest discover -s
 tests -v` in a Python 3 environment with Biopython, pysam, R and rpy2.
 Each environment must contain its own working R and rpy2 installation.
+`environment-py3.yml` records the Python 3 dependency versions used in the
+comparison; it does not install optional R packages for permutation tests or
+the cluster-specific LSF integration.
 
 The Python 3 event caller reached completion in an exploratory software smoke
 test using the same sample twice and empty intron-boundary inputs. At the time,
