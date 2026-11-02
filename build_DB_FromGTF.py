@@ -625,10 +625,14 @@ def getStrand(db_records, gene_name):
 
 
 def get_transcript_id(gff_obj):
-    t_id = gff_obj.attributes.split(";")[1]
-    t_id = t_id.split()[1]
-    t_id = t_id.replace("\"","")
-    return t_id
+    for attribute in gff_obj.attributes.split(";"):
+        parts = attribute.strip().split(maxsplit=1)
+        if len(parts) == 2 and parts[0] == "transcript_id":
+            transcript_id = parts[1].strip().strip('"')
+            if transcript_id:
+                return transcript_id
+            raise ValueError("GTF transcript_id must not be empty")
+    raise ValueError("GTF exon is missing the transcript_id attribute")
 
 
 def inferIntrons(db, db_name, chr):

@@ -19,12 +19,17 @@ identical junction tables and identical decompressed genome-read data.
 This does not establish full-pipeline equivalence.
 
 The Python 3 event caller reached completion in an exploratory software smoke
-test using the same sample twice and empty intron-boundary inputs. The annotation
-builder interpreted gene symbols as transcript IDs for the tested FlyBase GTF,
-and the BAM and annotation chromosome names did not agree; therefore this run
-does not constitute a valid biological analysis or a numerical regression test.
+test using the same sample twice and empty intron-boundary inputs. At the time,
+the annotation builder interpreted gene symbols as transcript IDs and the BAM
+and annotation chromosome names did not agree. This run does not constitute a
+valid biological analysis or a numerical regression test.
+
+The annotation builder now retrieves `transcript_id` by name rather than by
+attribute position. An integration test with real FlyBase r6.69 roX2 exon records
+checks that two transcripts and their coordinates are stored separately. This
+fix changes the legacy behavior for GTFs whose attributes are ordered differently.
 
 Important unresolved issues include paired-end fragment counting, chromosome
-prefixes, GTF attribute parsing, clipped/indel alignments, and compatibility
+prefixes, other GTF parsing assumptions, clipped/indel alignments, and compatibility
 of remaining dependencies. Do not use this branch for scientific conclusions
 until these issues and full regression comparisons have been addressed.

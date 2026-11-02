@@ -1,0 +1,6 @@
+X	FlyBase	exon	11579065	11579124	.	+	.	gene_id "FBgn0019660"; gene_symbol "lncRNA:roX2"; transcript_id "FBtr0073514"; transcript_symbol "lncRNA:roX2-RA";
+X	FlyBase	exon	11579670	11580171	.	+	.	gene_id "FBgn0019660"; gene_symbol "lncRNA:roX2"; transcript_id "FBtr0073514"; transcript_symbol "lncRNA:roX2-RA";
+X	FlyBase	exon	11579065	11579124	.	+	.	gene_id "FBgn0019660"; gene_symbol "lncRNA:roX2"; transcript_id "FBtr0308846"; transcript_symbol "lncRNA:roX2-RD";
+X	FlyBase	exon	11579386	11579399	.	+	.	gene_id "FBgn0019660"; gene_symbol "lncRNA:roX2"; transcript_id "FBtr0308846"; transcript_symbol "lncRNA:roX2-RD";
+X	FlyBase	exon	11579512	11579528	.	+	.	gene_id "FBgn0019660"; gene_symbol "lncRNA:roX2"; transcript_id "FBtr0308846"; transcript_symbol "lncRNA:roX2-RD";
+X	FlyBase	exon	11579670	11580100	.	+	.	gene_id "FBgn0019660"; gene_symbol "lncRNA:roX2"; transcript_id "FBtr0308846"; transcript_symbol "lncRNA:roX2-RD";
