@@ -94,7 +94,7 @@ class Tree(Container):
         assert isinstance(visitor, PrePostVisitor)
         if not self.isEmpty and not visitor.isDone:
             visitor.preVisit(self.key)
-            for i in xrange(self.degree):
+            for i in range(self.degree):
                 self.getSubtree(i).depthFirstTraversal(visitor)
             visitor.postVisit(self.key)
 #}>b
@@ -111,7 +111,7 @@ class Tree(Container):
         if not self.isEmpty:
             if mode == self.PREORDER:
                 yield self.key
-            for i in xrange(self.degree):
+            for i in range(self.degree):
                 for obj in self.getSubtree(i).depthFirstGenerator(mode):
                     yield obj
             if mode == self.POSTORDER:
@@ -130,7 +130,7 @@ class Tree(Container):
         while not queue.isEmpty and not visitor.isDone:
             head = queue.dequeue()
             visitor.visit(head.key)
-            for i in xrange(head.degree):
+            for i in range(head.degree):
                 child = head.getSubtree(i)
                 if not child.isEmpty:
                     queue.enqueue(child)
@@ -147,7 +147,7 @@ class Tree(Container):
         while not queue.isEmpty:
             head = queue.dequeue()
             yield head.key
-            for i in xrange(head.degree):
+            for i in range(head.degree):
                 child = head.getSubtree(i)
                 if not child.isEmpty:
                     queue.enqueue(child)
@@ -170,7 +170,7 @@ class Tree(Container):
         if self.isEmpty:
             return -1
         height = -1
-        for i in xrange(self.degree):
+        for i in range(self.degree):
             height = max(height, self.getSubtree(i).height)
         return height + 1
 
@@ -182,7 +182,7 @@ class Tree(Container):
         if self.IsEmpty():
             return 0
         result = 1
-        for i in xrange(self.degree):
+        for i in range(self.degree):
             result = result + self.getSubtree(i).count
         return result
 
@@ -199,23 +199,23 @@ class Tree(Container):
             """
             super(Tree.Iterator, self).__init__(tree)
             self._stack = StackAsLinkedList()
-	    if not tree.isEmpty:
-		self._stack.push(tree)
+            if not tree.isEmpty:
+                self._stack.push(tree)
 
-        def next(self):
+        def __next__(self):
             """
             (Tree.Iterator) -> Object
             Returns the next node in the tree.
             """
             if self._stack.isEmpty:
-		raise StopIteration
-	    top = self._stack.pop()
-	    i = top.degree - 1
-	    while i >= 0:
-		subtree = top.getSubtree(i)
-		if not subtree.isEmpty:
-		    self._stack.push(subtree)
-		i -= 1
+                raise StopIteration
+            top = self._stack.pop()
+            i = top.degree - 1
+            while i >= 0:
+                subtree = top.getSubtree(i)
+                if not subtree.isEmpty:
+                    self._stack.push(subtree)
+                i -= 1
             return top.key
 
     def __iter__(self):
@@ -229,27 +229,27 @@ class Tree(Container):
     @staticmethod
     def test(tree):
         "Tree test program."
-        print Tree.test.__doc__
+        print(Tree.test.__doc__)
         visitor = PrintingVisitor()
-        print tree
-        print "Breadth-First traversal"
+        print(tree)
+        print("Breadth-First traversal")
         tree.breadthFirstTraversal(visitor)
         visitor.finish()
-        print "Preorder traversal"
+        print("Preorder traversal")
         tree.depthFirstTraversal(PreOrder(visitor))
         visitor.finish()
-        print "Inorder traversal"
+        print("Inorder traversal")
         tree.depthFirstTraversal(InOrder(visitor))
         visitor.finish()
-        print "Postorder traversal"
+        print("Postorder traversal")
         tree.depthFirstTraversal(PostOrder(visitor))
         visitor.finish()
-        print "Using iterator"
+        print("Using iterator")
         for i in tree:
-            print i
-        print "Using depth-first generator (preorder)"
+            print(i)
+        print("Using depth-first generator (preorder)")
         for i in tree.depthFirstGenerator(Tree.PREORDER):
-            print i
-        print "Using breadth-first generator"
+            print(i)
+        print("Using breadth-first generator")
         for i in tree.breadthFirstGenerator():
-            print i
+            print(i)

@@ -38,7 +38,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -87,7 +87,7 @@ def main():
 
     method = options.method
     if method != "BH" and method != "bonferroni":
-        print "Wrong correction method."
+        print("Wrong correction method.")
         opt_parser.print_help()
         sys.exit(1)
 
@@ -96,7 +96,7 @@ def main():
     # List of lines in input file
     infile_lines_preFormat = file.readlines()      
 
-    infile_lines_w_zeros = map(formatLine, infile_lines_preFormat)
+    infile_lines_w_zeros = list(map(formatLine, infile_lines_preFormat))
 
     # Remove headerline
     if infile_lines_w_zeros[0].startswith("#"):
@@ -148,8 +148,8 @@ def main():
     for this_pval in adj_p_vals_sort:
         for i in range(len(infile_lines)):
             if adj_p_vals[i] == this_pval and used_line[i] == False:
-                print infile_lines[i] + "\t" + repr(p_vals[i]) + "\t" +\
-                      repr(adj_p_vals[i]) 
+                print(infile_lines[i] + "\t" + repr(p_vals[i]) + "\t" +\
+                      repr(adj_p_vals[i])) 
 
                 used_line[i] = True
 

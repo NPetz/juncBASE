@@ -3,7 +3,7 @@
 # Author: Angela Brooks
 # Program Completion Date:
 # Description: Takes .gtf files as input and parses out the information to
-# build a database containing the transcript annotations 
+# build a database containing the transcript annotations
 # Modification Date(s):
 # I highly recommend obtaining GTF files from ensembl.  It is important to have
 # transcript ids associated with genes.
@@ -12,7 +12,7 @@
 
 
 import sys
-import optparse 
+import optparse
 import os
 import pdb
 
@@ -58,7 +58,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -66,15 +66,15 @@ class GFF_Record:
     def __init__(self, tab_delim_line):
         #Error check
         if tab_delim_line.find("\t") == NOT_FOUND:
-            print "GFF file must be tab delimited."
+            print("GFF file must be tab delimited.")
             sys.exit(1)
 
         l = tab_delim_line.split("\t")
 
         #Error check
         if len(l) > 9:
-            print "Too many fields in GFF line:"
-            print tab_delim_line
+            print("Too many fields in GFF line:")
+            print(tab_delim_line)
             sys.exit(1)
 
         #initialize variables
@@ -103,13 +103,13 @@ class GFF_Record:
                 self.score = l[5]
             if i == 6:
                 self.strand = l[6]
-                if ((self.strand != "+") and 
+                if ((self.strand != "+") and
                     (self.strand != "-")):
                     self.strand = "."
-                
+
             if i == 7:
                 self.frame = l[7]
-                if ((self.frame != 0) and (self.frame != 1) and 
+                if ((self.frame != 0) and (self.frame != 1) and
                     (self.frame != 2)):
                     self.frame = "."
             if i == 8:
@@ -118,14 +118,14 @@ class GFF_Record:
 ###############
 # END CLASSES #
 ###############
- 
+
 ########
-# MAIN #	
+# MAIN #
 ########
 def main():
-	
+
     opt_parser = OptionParser()
-   
+
     # Add Options. Required options should have default=None
     opt_parser.add_option("--initialize",
                           dest="initialize",
@@ -169,10 +169,10 @@ def main():
                           type="string",
                           help="Location to put sqlite database. Default=%s" % DB_DIR,
                           default=DB_DIR)
-    
+
 
     (options, args) = opt_parser.parse_args()
-	
+
     # validate the command line arguments
     opt_parser.check_required("-d")
 
@@ -197,11 +197,11 @@ def main():
     chr2gtf_lines = getGTFLines(options.gtf_file)
 
     buildAnnotDB(db_obj, chr2gtf_lines, db_name, use_gene_name)
-   
+
     if genome_file:
         extractInsertSeqs("exon", db_obj, genome_file, db_name)
         extractInsertSeqs("intron", db_obj, genome_file, db_name)
-			
+
     sys.exit(0)
 
 ############
@@ -233,8 +233,8 @@ def buildAnnotDB(db, chr2gtf_lines, db_name, use_gene_name):
             if gff_obj.feature != 'exon':
                 continue
 
-            transcript_id = get_transcript_id(gff_obj) 
-        
+            transcript_id = get_transcript_id(gff_obj)
+
             # Update transcript_id2strand dictionary
             if not transcript_id in transcript_id2strand:
                 transcript_id2strand[transcript_id] = gff_obj.strand
@@ -242,18 +242,18 @@ def buildAnnotDB(db, chr2gtf_lines, db_name, use_gene_name):
             # Update all feature dictionaries
 #           if gff_obj.feature == '5UTR':
 #               updateDictOfLists(five_utr_dict, transcript_id, gff_obj)
-#           elif gff_obj.feature == '3UTR':     
+#           elif gff_obj.feature == '3UTR':
 #               updateDictOfLists(three_utr_dict, transcript_id, gff_obj)
-#           elif gff_obj.feature == 'start_codon':     
+#           elif gff_obj.feature == 'start_codon':
 #               updateDictOfLists(start_codon_dict, transcript_id, gff_obj)
-#           elif gff_obj.feature == 'stop_codon':     
+#           elif gff_obj.feature == 'stop_codon':
 #               updateDictOfLists(stop_codon_dict, transcript_id, gff_obj)
-#           elif gff_obj.feature == 'CDS':     
+#           elif gff_obj.feature == 'CDS':
 #               updateDictOfLists(cds_dict, transcript_id, gff_obj)
             if gff_obj.feature == 'exon':
                 updateDictOfLists(exon_dict, transcript_id, gff_obj)
             else:
-                print "Not using feature %s" % (gff_obj.feature)
+                print("Not using feature %s" % (gff_obj.feature))
 
 
         buildExonTable(db, chr, transcript_id2strand,
@@ -270,10 +270,10 @@ def buildAnnotDB(db, chr2gtf_lines, db_name, use_gene_name):
 #       insertFeature(db, "five_utr", five_utr_dict, db_name)
 #       insertFeature(db, "three_utr", three_utr_dict, db_name)
 
-        buildGeneTable(db, db_name, chr)       
+        buildGeneTable(db, db_name, chr)
 
         inferIntrons(db, db_name, chr)
- 
+
 def buildExonTable(db, chr, transcript_id2strand,
                    five_utr_dict,
                    three_utr_dict,
@@ -289,7 +289,7 @@ def buildExonTable(db, chr, transcript_id2strand,
     """
     start_idx = 0
     stop_idx = 1
-    
+
     component_list = [five_utr_dict, three_utr_dict, start_codon_dict,
                       stop_codon_dict, cds_dict, exon_dict]
 
@@ -307,25 +307,25 @@ def buildExonTable(db, chr, transcript_id2strand,
         elif txt_id in cds_dict:
             this_component_list = component_list[:-1]
         else:
-            print "Transcript does not have a CDS or exon feature: %s" % txt_id
+            print("Transcript does not have a CDS or exon feature: %s" % txt_id)
             sys.exit(1)
 
-        exon_coords, classification = getAllComponents(txt_id,  
+        exon_coords, classification = getAllComponents(txt_id,
                                                   this_component_list)
-        
-#        exon_coords = mergeConnectBlocks(blocks) 
-   
-        # Getting gene Name from arbitrary CDS or exon entry 
+
+#        exon_coords = mergeConnectBlocks(blocks)
+
+        # Getting gene Name from arbitrary CDS or exon entry
         if txt_id in exon_dict:
             gene_name = getGeneName(exon_dict[txt_id][0], use_gene_name)
         else:
             gene_name = getGeneName(cds_dict[txt_id][0], use_gene_name)
-            
+
         strand = transcript_id2strand[txt_id]
 
         for coord in exon_coords:
             if coord[start_idx] == 0:
-                print "Error: GTF file has to be 1-based, not 0-based."
+                print("Error: GTF file has to be 1-based, not 0-based.")
                 sys.exit(1)
             exon_tuple = getExonTuple(db, txt_id, gene_name, chr, coord[start_idx],
                                     coord[stop_idx], strand, classification, db_name)
@@ -341,7 +341,7 @@ def buildExonTable(db, chr, transcript_id2strand,
 
 def createAnnotTables(db_obj, db_name):
     db_obj.createTable("exon",
-        """exon_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        """exon_id INTEGER PRIMARY KEY AUTOINCREMENT,
            transcript_id TEXT,
            gene_name TEXT,
            chr TEXT,
@@ -357,7 +357,7 @@ def createAnnotTables(db_obj, db_name):
                        "transcript_id, gene_name", db_name,
                        check_same_thread = False)
 
-    
+
     db_obj.createTable("intron",
         """intron_id INTEGER PRIMARY KEY AUTOINCREMENT,
            transcript_id TEXT,
@@ -382,7 +382,7 @@ def createAnnotTables(db_obj, db_name):
 
 #   db_obj.createTable("start_codon",
 #       """exon_id INTEGER PRIMARY KEY,
-#          start INTEGER, 
+#          start INTEGER,
 #          end INTEGER""",
 #       db_name)
 
@@ -393,7 +393,7 @@ def createAnnotTables(db_obj, db_name):
 #       db_name)
 
 #   db_obj.createTable("five_utr",
-#       """exon_id INTEGER PRIMARY KEY, 
+#       """exon_id INTEGER PRIMARY KEY,
 #          start INTEGER,
 #          end INTEGER""",
 #       db_name)
@@ -428,7 +428,7 @@ def buildGeneTable(db, db_name, chr):
     first_exon_idx = 0
     last_exon_idx = -1
 
-    cg_nums = db.getDBRecords_Dict("""SELECT DISTINCT gene_name FROM exon 
+    cg_nums = db.getDBRecords_Dict("""SELECT DISTINCT gene_name FROM exon
                                       WHERE chr = \'%s\'""" % chr,
                                    db_name,
                                    check_same_thread = False)
@@ -438,7 +438,7 @@ def buildGeneTable(db, db_name, chr):
         gene = row["gene_name"]
 
 
-        # Need to escape names with "'"        
+        # Need to escape names with "'"
         mysql_query_gene = gene
         if "'" in mysql_query_gene:
             mysql_query_gene = mysql_query_gene.replace("'","''")
@@ -471,7 +471,7 @@ def buildGeneTable(db, db_name, chr):
         vals = (mysql_query_gene, strand, start_records[first_exon_idx]["chr"],
                 gene_start, gene_end)
         gene_rows.append(vals)
-        
+
 
     # Now insert all into the table
     db.insertListIntoTable("gene",
@@ -497,7 +497,7 @@ def extractInsertSeqs(tbl_name, db_obj, genome_file_name, db_name):
         # Remove >
         chr_name = name.lstrip(">")
 
-        scaff_seq = DNA(tempSeqObj.seq.tostring())
+        scaff_seq = DNA(str(tempSeqObj.seq))
 
         # Get all exons or introns from this chr
         select_statement = """SELECT * FROM %s
@@ -508,7 +508,7 @@ def extractInsertSeqs(tbl_name, db_obj, genome_file_name, db_name):
                                            check_same_thread = False)
 
         if records is None:
-            print "No records found on %s" % chr_name
+            print("No records found on %s" % chr_name)
             continue
 
         for row in records:
@@ -530,7 +530,7 @@ def extractInsertSeqs(tbl_name, db_obj, genome_file_name, db_name):
 
             db_obj.updateTable(tbl_name, update_statement, db_name,
                                check_same_thread = False)
-                
+
 
 def formatLine(line):
     line = line.replace("\r","")
@@ -546,11 +546,11 @@ def getAllComponents(txt_id, dict_list):
     blocks = []
 
     classification = "."
-    
+
     for i in range(len(dict_list)):
         if txt_id in dict_list[i]:
             for gff_obj in dict_list[i][txt_id]:
-                blocks.append((int(gff_obj.start), 
+                blocks.append((int(gff_obj.start),
                                int(gff_obj.end)))
                 if type(gff_obj.score) == type(1):
                     if gff_obj.score != classification:
@@ -587,10 +587,10 @@ def getGTFLines(gtf_file):
         # Remove comments
         if line.startswith("#"):
             continue
-    
+
         line = formatLine(line)
 
-        chr = line.split("\t")[0] 
+        chr = line.split("\t")[0]
 
         updateDictOfLists(chr2gtf_lines, chr, line)
 
@@ -612,7 +612,7 @@ def getStrand(db_records, gene_name):
 
     # Error check
     if strandIsMinus and strandIsPlus:
-        print "Disagreeing strands in gene: %s" % gene_name
+        print("Disagreeing strands in gene: %s" % gene_name)
         return None
 
     if strandIsMinus:
@@ -649,7 +649,7 @@ def inferIntrons(db, db_name, chr):
 
         # Escaping "'" in names
         if "'" in txt:
-            txt = txt.replace("'","''") 
+            txt = txt.replace("'","''")
 
         # Get all exons of this transcript
         exon_select = """SELECT chr, start, end, strand, gene_name,
@@ -662,7 +662,7 @@ def inferIntrons(db, db_name, chr):
                                             check_same_thread = False)
 
         if not validTranscript(exon_records):
-            print "Transcript has overlapping exons: %s" % txt
+            print("Transcript has overlapping exons: %s" % txt)
             continue
 
         prev_exon_end = 0
@@ -683,8 +683,8 @@ def inferIntrons(db, db_name, chr):
                     exon_row["strand"], gene_name, exon_row["classification"])
 
             intron_rows.append(vals)
-    
-            prev_exon_end = int(exon_row["end"]) 
+
+            prev_exon_end = int(exon_row["end"])
 
     # Now insert all into the table
     db.insertListIntoTable("intron",
@@ -714,28 +714,28 @@ def insertFeature(db, table, table_dict, db_name):
     """
     Will insert the cds, 5UTR, 3UTR, start_codon, and stop_codon
     into the database.
-    """ 
+    """
     for txt_id in table_dict:
         for gff_obj in table_dict[txt_id]:
 
             this_txt_id = get_transcript_id(gff_obj)
             if "'" in this_txt_id:
                 this_txt_id = this_txt_id.replace("'","''")
-            
+
             select_statement = """SELECT exon_id FROM exon
                                   WHERE
                                   transcript_id=\'%s\'
                                   AND
                                   start<=%d
-                                  AND 
+                                  AND
                                   end>=%d""" % (this_txt_id,
                                                 int(gff_obj.start),
                                                 int(gff_obj.end))
             record = db.getDBRow_Dict(select_statement, db_name,
                                       check_same_thread = False)
             if record == None:
-                print "Could not find exon for %s:" % table
-                print gff_obj
+                print("Could not find exon for %s:" % table)
+                print(gff_obj)
                 continue
 
             exon_id = int(record["exon_id"])
@@ -744,9 +744,9 @@ def insertFeature(db, table, table_dict, db_name):
             row_exist_statement = """SELECT exon_id FROM %s
                                      WHERE exon_id=%d""" % (table, exon_id)
             if rowExists(db, db_name, row_exist_statement):
-                print "This exon_id has multiple associated %s: %d" % (table,
-                                                                       exon_id),
-                print " in %s" % db_name
+                print("This exon_id has multiple associated %s: %d" % (table,
+                                                                       exon_id), end=' ')
+                print(" in %s" % db_name)
                 continue
 
             cols = "exon_id, start, end"
@@ -765,8 +765,8 @@ def mergeConnectBlocks(blocks):
 
     # This dictionary is in the form {coord:0 (arbitrary value)}
     # The dictionary format prevents duplicates.
-    exonic_dict = {} 
-    
+    exonic_dict = {}
+
     exon_blocks = [] # Return value
 
     for block in blocks:
@@ -774,7 +774,7 @@ def mergeConnectBlocks(blocks):
             exonic_dict[i] = 0
 
     # Output exon locations
-    exonic_locations = exonic_dict.keys() 
+    exonic_locations = list(exonic_dict.keys())
     exonic_locations.sort()
 
     lastPos = -1
@@ -782,7 +782,7 @@ def mergeConnectBlocks(blocks):
 
     for i in range(len(exonic_locations)):
         thisPos = exonic_locations[i]
-        
+
         if thisPos != (lastPos + 1):
             if lastPos == -1:
                 startPos = thisPos
@@ -800,7 +800,7 @@ def mergeConnectBlocks(blocks):
     exon_blocks.append((startPos, lastPos))
 
     return exon_blocks
-        
+
 def rowExists( db, db_name, select_statement):
 
     row = db.getDBRow_Dict( select_statement, db_name ,
@@ -834,6 +834,6 @@ def validTranscript(exon_records):
     return True
 
 #################
-# END FUNCTIONS #	
-#################	
+# END FUNCTIONS #
+#################
 if __name__ == "__main__": main()

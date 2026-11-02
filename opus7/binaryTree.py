@@ -23,6 +23,7 @@ import sys
 from opus7.tree import Tree
 from opus7.prePostVisitor import PrePostVisitor
 from opus7.exception import *
+from opus7.object import cmp
 
 #{
 class BinaryTree(Tree):
@@ -263,7 +264,7 @@ class BinaryTree(Tree):
     @staticmethod
     def main(*argv):
         "BinaryTree test program."
-        print BinaryTree.main.__doc__
+        print(BinaryTree.main.__doc__)
         bt = BinaryTree(4)
         bt.attachLeft(BinaryTree(2))
         bt.attachRight(BinaryTree(6))

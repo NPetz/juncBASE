@@ -40,7 +40,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -103,7 +103,7 @@ def main():
     try:
         records = SeqIO.index(genome_file, "fasta")
     except:
-        print "Could not open genome sequence."
+        print("Could not open genome sequence.")
         sys.exit(1)
 
     if by_chr:
@@ -115,7 +115,7 @@ def main():
             elif unFormatChr(this_chr) in records:
                 chr_seq = records[unFormatChr(this_chr)].seq
             else:
-                print "Cannot find %s in genome sequence." % this_chr
+                print("Cannot find %s in genome sequence." % this_chr)
                 sys.exit(1)
             jcn2strands = {} 
             for this_samp in samples:
@@ -275,7 +275,7 @@ def disambiguateJcnStr(chr_seq, line_list, majority_rules):
     try:
         chr, start, end = convertCoordStr(line_list[3])
     except:
-        print "Junction BED file must have intron position in 4th column."
+        print("Junction BED file must have intron position in 4th column.")
         sys.exit(1)    
 
     intron_seq = chr_seq[start-1:end]
@@ -306,7 +306,7 @@ def disambiguateJcnStr(chr_seq, line_list, majority_rules):
         line_list[5] = "-"
     else:
         if not majority_rules: # Strand will resolved later if majority_rules
-            print "Cannot find strand for %s" % line_list[3]
+            print("Cannot find strand for %s" % line_list[3])
 
 
 def disambiguateJcnStr_findChr(records, line_list, majority_rules):
@@ -321,7 +321,7 @@ def disambiguateJcnStr_findChr(records, line_list, majority_rules):
     elif unFormatChr(this_chr) in records:
         chr_seq = records[unFormatChr(this_chr)].seq
     else:
-        print "Cannot find %s in genome sequence." % this_chr
+        print("Cannot find %s in genome sequence." % this_chr)
         sys.exit(1)
 
     disambiguateJcnStr(chr_seq, line_list, majority_rules)
@@ -358,7 +358,7 @@ def getMajorityStrand(jcn2strands):
     for jcn in jcn2strands:
         if len(jcn2strands[jcn]) == 1:
             if "." in jcn2strands[jcn]:
-                print "No strand for %s" % jcn
+                print("No strand for %s" % jcn)
             continue
 
         if "+" in jcn2strands[jcn]:
@@ -372,7 +372,7 @@ def getMajorityStrand(jcn2strands):
 
         if pos_count == neg_count:
             fixed_jcn2strand[jcn] = "."
-            print "No strand for %s" % jcn
+            print("No strand for %s" % jcn)
             continue
 
         if pos_count > neg_count:

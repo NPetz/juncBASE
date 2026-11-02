@@ -34,7 +34,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -101,11 +101,11 @@ def main():
         if isContained:
             for t in title_set:
                 if t in title:
-                    print record.format("fasta"),
+                    print(record.format("fasta"), end=' ')
                     break
         else:
             if title in title_set:
-                print record.format("fasta"),
+                print(record.format("fasta"), end=' ')
 	
     sys.exit(0)
 

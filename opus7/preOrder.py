@@ -54,7 +54,7 @@ class PreOrder(PrePostVisitor):
     @staticmethod
     def main(*argv):
         "PreOrder test program."
-        print PreOrder.main.__doc__
+        print(PreOrder.main.__doc__)
         return 0
 
 if __name__ == "__main__":

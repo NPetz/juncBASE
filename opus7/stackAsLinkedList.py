@@ -100,7 +100,7 @@ class StackAsLinkedList(Stack):
             visitor.visit(ptr.datum)
             if visitor.isDone:
                 return
-            ptr = ptr.next
+            ptr = ptr.__next__
 #}>c
 
 #{
@@ -115,18 +115,18 @@ class StackAsLinkedList(Stack):
             Constructs an iterator for the given stack.
             """
             super(StackAsLinkedList.Iterator, self).__init__(
-		stack)
+                stack)
             self._position = stack._list.head
 
-        def next(self):
+        def __next__(self):
             """
             (StackAsLinkedList.Iterator) -> Object
             Returns the next element.
             """
             if self._position is None:
-		raise StopIteration
-	    element = self._position
-	    self._position = self._position.next
+                raise StopIteration
+            element = self._position
+            self._position = self._position.__next__
             return element.datum
 
     def __iter__(self):
@@ -149,7 +149,7 @@ class StackAsLinkedList(Stack):
     @staticmethod
     def main(*argv):
         "StackAsLinkedList test program."
-        print StackAsLinkedList.main.__doc__
+        print(StackAsLinkedList.main.__doc__)
         stack2 = StackAsLinkedList()
         Stack.test(stack2)
         return 0

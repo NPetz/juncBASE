@@ -42,7 +42,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -153,7 +153,7 @@ def main():
     if os.path.exists(root_dir):		
         root_dir = os.path.abspath(root_dir)
     else:
-        print "Root directory does not exist: %s" % root_dir
+        print("Root directory does not exist: %s" % root_dir)
         opt_parser.print_help()
         sys.exit(1)
 
@@ -238,8 +238,8 @@ def main():
             event_key, raw_count_str, lenNorm_count_str, genes, strand, const_region = getKeyandCount(line)
 
             if event_key not in event2sample2raw_counts:
-                print "Event from sample, not in dict: %s, %s" % (samp,
-                                                                  event_key)
+                print("Event from sample, not in dict: %s, %s" % (samp,
+                                                                  event_key))
                 continue
 
             event2sample2raw_counts[event_key][samp] = raw_count_str
@@ -306,10 +306,10 @@ def main():
                             event2genesStrand[event_key][2])
 
         if len(raw_counts_list) != num_samples:
-            print "Error: Issue with raw counts for %s" % out_key
+            print("Error: Issue with raw counts for %s" % out_key)
             sys.exit(1)
         if len(lenNorm_counts_list) != num_samples:
-            print "Error: Issue with lenNorm counts for %s" % out_key
+            print("Error: Issue with lenNorm counts for %s" % out_key)
             sys.exit(1)
             
 
@@ -366,10 +366,10 @@ def main():
 
 
         if len(raw_counts_list) != num_samples:
-            print "Error: Issue with raw counts for %s" % out_key
+            print("Error: Issue with raw counts for %s" % out_key)
             sys.exit(1)
         if len(lenNorm_counts_list) != num_samples:
-            print "Error: Issue with lenNorm counts for %s" % out_key
+            print("Error: Issue with lenNorm counts for %s" % out_key)
             sys.exit(1)
 
         raw_outline = "%s\t%s\n" % (out_key,
@@ -425,10 +425,10 @@ def main():
                             event2genesStrand[event_key][2])
 
         if len(raw_counts_list) != num_samples:
-            print "Error: Issue with raw counts for %s" % out_key
+            print("Error: Issue with raw counts for %s" % out_key)
             sys.exit(1)
         if len(lenNorm_counts_list) != num_samples:
-            print "Error: Issue with lenNorm counts for %s" % out_key
+            print("Error: Issue with lenNorm counts for %s" % out_key)
 
         raw_outline = "%s\t%s\n" % (out_key,
                                 "\t".join(raw_counts_list))
@@ -483,7 +483,7 @@ def getKeyandCount(line):
     lenNorm_count_str = "%s;%s" % (excl_lenNorm_count, incl_lenNorm_count)
 
     if (("-" in raw_count_str) or ("-" in lenNorm_count_str)):
-        print "Negative value in %s" % line
+        print("Negative value in %s" % line)
         raw_count_str = "0;0"
         lenNorm_count_str = "0;0"
 
@@ -538,7 +538,7 @@ def getPSI(excl_incl_ct_str):
         excl = float(excl_str)
         incl = float(incl_str)
     except:
-        print "Warning:Bad PSI value"
+        print("Warning:Bad PSI value")
         return NA
 
     if excl + incl == 0:
@@ -558,7 +558,7 @@ def hasInclusionCounts(event_key,
 
     for samp in left_intron2sample2counts[event_key]:
         count_str = left_intron2sample2counts[event_key][samp]
-        excl_ct, incl_ct = map(int,count_str.split(";"))
+        excl_ct, incl_ct = list(map(int,count_str.split(";")))
 
         if incl_ct > 0:
             leftHasInclusion = True
@@ -566,7 +566,7 @@ def hasInclusionCounts(event_key,
 
     for samp in right_intron2sample2counts[event_key]:
         count_str = right_intron2sample2counts[event_key][samp]
-        excl_ct, incl_ct = map(int,count_str.split(";"))
+        excl_ct, incl_ct = list(map(int,count_str.split(";")))
 
         if incl_ct > 0:
             rightHasInclusion = True

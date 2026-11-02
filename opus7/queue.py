@@ -51,13 +51,13 @@ class Queue(Container):
     @staticmethod
     def test(queue):
         "Queue test program."
-        print Queue.test.__doc__
-        for i in xrange(6):
+        print(Queue.test.__doc__)
+        for i in range(6):
             if queue.isFull:
                 break
             queue.enqueue(i)
-        print queue
-        print queue.head
+        print(queue)
+        print(queue.head)
         while not queue.isEmpty:
             obj = queue.dequeue()
-            print obj
+            print(obj)

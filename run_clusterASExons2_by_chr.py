@@ -25,7 +25,7 @@ DEF_NUM_PROCESSES = 2
 BIN_DIR = os.path.realpath(os.path.dirname(sys.argv[0]))
 SCRIPT = "%s/clusterASExons2.py" % BIN_DIR
 if not os.path.exists(SCRIPT):
-    print "ERROR: clusterASExons2.py needs to be in the same directory."
+    print("ERROR: clusterASExons2.py needs to be in the same directory.")
     sys.exit(1)
 
 SHELL = "/bin/tcsh"
@@ -48,7 +48,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -153,7 +153,7 @@ def main():
         if ctr % num_processes == 0:
             os.system(cmd)
         else:
-            print cmd
+            print(cmd)
             Popen(cmd, shell=True, executable=SHELL)
 
     sys.exit(0)

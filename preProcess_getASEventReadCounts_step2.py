@@ -45,7 +45,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -80,7 +80,7 @@ def main():
     if os.path.exists(input_dir):
         input_dir = os.path.abspath(options.input_dir)
     else:
-        print "ERROR. Input directory does not exist: %s" % input_dir
+        print("ERROR. Input directory does not exist: %s" % input_dir)
         opt_parser.print_help()
         sys.exit(1)
 
@@ -181,8 +181,8 @@ def getJunctionStrs(bed_file):
     
         strand = line_list[5]
         
-        blocks = map(int,line_list[10].split(","))
-        block_starts = map(int,line_list[11].split(","))
+        blocks = list(map(int,line_list[10].split(",")))
+        block_starts = list(map(int,line_list[11].split(",")))
 
         intron_start = chrStart + blocks[0] + 1
         intron_end = chrStart + block_starts[1]

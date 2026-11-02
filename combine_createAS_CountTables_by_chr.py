@@ -36,7 +36,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -145,7 +145,7 @@ def main():
             chr_out = open(outfile)
             chr_out_lenNorm = open(outfile_lenNorm)
         except:
-            print "No file for %s" % this_chr
+            print("No file for %s" % this_chr)
             continue
 
         # Check if there is anything in the file
@@ -153,8 +153,8 @@ def main():
         chr_out_lenNorm_lines = chr_out_lenNorm.readlines()
 
         if (len(chr_out.readlines()) == 1) or (len(chr_out_lenNorm_lines) == 1):
-            print "Warning: No information for %s" % this_chr
-            print "This may have failed in previous step."
+            print("Warning: No information for %s" % this_chr)
+            print("This may have failed in previous step.")
             continue
 
         for line in chr_out_lines:
@@ -176,15 +176,15 @@ def main():
             chr_left_intron = open(left_file)
             chr_left_intron_lenNorm = open(left_file_lenNorm)
         except:
-            print "No left file for %s" % this_chr
+            print("No left file for %s" % this_chr)
             continue
 
         chr_left_intron_lines = chr_left_intron.readlines()
         chr_left_intron_lenNorm_lines = chr_left_intron_lenNorm.readlines()
 
         if (len(chr_left_intron_lines) == 1) or (len(chr_left_intron_lenNorm_lines) == 1):
-            print "Warning: No information for left intron %s" % this_chr
-            print "This may have failed in previous step."
+            print("Warning: No information for left intron %s" % this_chr)
+            print("This may have failed in previous step.")
             continue
             
         for line in chr_left_intron_lines:
@@ -206,15 +206,15 @@ def main():
             chr_right_intron = open(right_file)
             chr_right_intron_lenNorm = open(right_file_lenNorm)
         except:
-            print "No right file for %s" % this_chr
+            print("No right file for %s" % this_chr)
             continue 
 
         chr_right_intron_lines = chr_right_intron.readlines()
         chr_right_intron_lenNorm_lines = chr_right_intron_lenNorm.readlines()
 
         if (len(chr_right_intron_lines) == 1) or (len(chr_right_intron_lenNorm_lines) == 1):
-            print "Warning: No information for right intron %s" % this_chr
-            print "This may have failed in previous step."
+            print("Warning: No information for right intron %s" % this_chr)
+            print("This may have failed in previous step.")
             continue
             
         for line in chr_right_intron_lines:

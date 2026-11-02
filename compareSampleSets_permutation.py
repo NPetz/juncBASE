@@ -75,7 +75,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -261,7 +261,7 @@ def main():
 #           raw_right_input_file_name = "%s_right_intron_counts.txt" % prefix
     else:
         if not options.generic_file:
-            print "Must include either --in_prefix or -i"
+            print("Must include either --in_prefix or -i")
             opt_parser.print_help()
             sys.exit(1)
 
@@ -282,7 +282,7 @@ def main():
     html_out_dir = options.html_dir
     html_out_table_name = None
     if html_out_dir:
-        exec "import rpy2.robjects.lib.ggplot2 as ggplot2" in globals()
+        exec("import rpy2.robjects.lib.ggplot2 as ggplot2", globals())
         html_out_dir = formatDir(html_out_dir)
         if not os.path.exists(html_out_dir):
             os.mkdir(html_out_dir)
@@ -314,14 +314,14 @@ def main():
         isGeneric = True
 
     if permutation and isGeneric:
-        print "Permutation test is only for JuncBASE tables"
+        print("Permutation test is only for JuncBASE tables")
         opt_parser.print_help()
         sys.exit(1)
 
     left_input_file = None
     right_input_file = None
     if left_input_file_name is None:
-        print "Warning: No intron retention file given as input.  Will not calculate IR events."
+        print("Warning: No intron retention file given as input.  Will not calculate IR events.")
     else:
         left_input_file = open(left_input_file_name)
         right_input_file = open(right_input_file_name)
@@ -335,13 +335,13 @@ def main():
 
     method = options.mt_method
     if method != "BH" and method != "bonferroni":
-        print "Wrong method indicated."
+        print("Wrong method indicated.")
         opt_parser.print_help()
         sys.exit(1)
 
     which_test = options.which_test 
     if which_test != "Wilcoxon" and which_test != "t-test":
-        print "Wrong method indicated."
+        print("Wrong method indicated.")
         opt_parser.print_help()
         sys.exit(1)
 
@@ -375,7 +375,7 @@ def main():
 #   if permutation:
 #       raw_lines = raw_input_file.readlines()
     num_lines = len(lenNorm_lines)
-    for j in xrange(num_lines):
+    for j in range(num_lines):
         line = formatLine(lenNorm_lines[j])
 
         if line.startswith("#"):
@@ -439,7 +439,7 @@ def main():
             total_counts = []
 
         if event in event2idx:
-            print "Warning: Skipping duplicate event: %s" % event
+            print("Warning: Skipping duplicate event: %s" % event)
             continue
 
         if isGeneric:
@@ -488,7 +488,7 @@ def main():
             else:
                 if permutation:
                     # Compare samples groups together in a wilcoxon rank sum test
-                    [col_excl, col_incl] = map(int,counts[i].split(";"))
+                    [col_excl, col_incl] = list(map(int,counts[i].split(";")))
 
                     total_count = col_excl + col_incl
                     total_counts.append(total_count)
@@ -579,7 +579,7 @@ def main():
                                         set1_psis, 
                                         set2_psis)
         except:
-            print "Warning: Event not tested: %s" % event
+            print("Warning: Event not tested: %s" % event)
             continue
 
         if robjects.r["is.nan"](raw_pval)[0]:
@@ -638,8 +638,8 @@ def main():
             right_min_psi = 200
             right_max_psi = -1
             for j in range(total_samples):
-                [left_col_excl, left_col_incl] = map(int,left_events2counts[event][j].split(";"))
-                [right_col_excl, right_col_incl] = map(int,right_events2counts[event][j].split(";"))
+                [left_col_excl, left_col_incl] = list(map(int,left_events2counts[event][j].split(";")))
+                [right_col_excl, right_col_incl] = list(map(int,right_events2counts[event][j].split(";")))
 
                 left_total = left_col_excl + left_col_incl
                 right_total = right_col_excl + right_col_incl
@@ -806,7 +806,7 @@ def main():
                                                 set1_psis_right,
                                                 set2_psis_right)
             except:
-                print "Warning: Event not tested: %s" % event
+                print("Warning: Event not tested: %s" % event)
                 continue
 
             if simple_IR:
@@ -959,7 +959,7 @@ def checkSamples(sampleList, sample_set):
 
     for samp in sample_set:
         if samp not in sampleList:
-            print "Warning: Sample in sample set not in data: %s" % samp
+            print("Warning: Sample in sample set not in data: %s" % samp)
             continue
         checkedSamples.append(samp)
 
@@ -1053,13 +1053,13 @@ def get_null_dist(excl_incl_counts, total_counts, all_psis,
     stats = []
     ctr = 0
 
-    for i in xrange(0, NUM_ITERATIONS, NUM_IN_BATCH):
+    for i in range(0, NUM_ITERATIONS, NUM_IN_BATCH):
         # Calls to R will be batched to reduce time
         idx2incl_iter = []
         iter_ctr = 0
         for excl_incl_count in excl_incl_counts: 
             iter_ctr += 1
-            excl, incl = map(int, excl_incl_count.split(";"))
+            excl, incl = list(map(int, excl_incl_count.split(";")))
             robjects.r["set.seed"](random_seed + i + iter_ctr) 
             tot_count = excl + incl 
 
@@ -1073,7 +1073,7 @@ def get_null_dist(excl_incl_counts, total_counts, all_psis,
                                                        excl + 1)))
 
         # random calls have been made. Use values to get statistic.
-        for k in xrange(NUM_IN_BATCH):
+        for k in range(NUM_IN_BATCH):
 
             this_idx2sample_set = {}
 
@@ -1120,7 +1120,7 @@ def get_null_dist(excl_incl_counts, total_counts, all_psis,
 #                                                      all_psis[idx]/100)[0])
                 this_psi = (this_incl/total_counts[idx]) * 100
                 if this_psi > 100.0:
-                    print "Error in getting PSI value from iteration"
+                    print("Error in getting PSI value from iteration")
                     sys.exit(1)
 #                   if abs(this_incl - total_counts[idx]) <= 2:
 #                       # There are small adjustments for rounding
@@ -1151,7 +1151,7 @@ def getPSI_sample_sum(excl_incl_ct_str, sum_thresh):
         excl = float(excl_str)
         incl = float(incl_str)
     except:
-        print "Warning: Bad counts for PSI"
+        print("Warning: Bad counts for PSI")
         return (NA, NA)
 
     if (excl + incl) <  sum_thresh:  
@@ -1177,7 +1177,7 @@ def getEventInclLen(event_str, jcn_seq_len):
         inclusion_isoform_len = getInclIsoformLen(event_str, jcn_seq_len)
 
     if not inclusion_isoform_len:
-        print "Error in obtaining isoform length from: %s" % event_str
+        print("Error in obtaining isoform length from: %s" % event_str)
         sys.exit(1)
 
     return inclusion_isoform_len

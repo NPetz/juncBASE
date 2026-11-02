@@ -60,7 +60,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -229,7 +229,7 @@ def main():
     left_input_file = None
     right_input_file = None
     if left_input_file_name is None:
-        print "Warning: No intron retention file given as input.  Will not calculate IR events."
+        print("Warning: No intron retention file given as input.  Will not calculate IR events.")
     else:
         left_input_file = open(left_input_file_name)
         right_input_file = open(right_input_file_name)
@@ -239,13 +239,13 @@ def main():
 
     method = options.mt_method
     if method != "BH" and method != "bonferroni":
-        print "Wrong method indicated."
+        print("Wrong method indicated.")
         opt_parser.print_help()
         sys.exit(1)
 
     which_test = options.which_test 
     if which_test != "Wilcoxon" and which_test != "t-test":
-        print "Wrong method indicated."
+        print("Wrong method indicated.")
         opt_parser.print_help()
         sys.exit(1)
 
@@ -313,7 +313,7 @@ def main():
         counts = line_list[samp_start_idx:]
 
         if event in event2idx:
-            print "Warning: Skipping duplicate event: %s" % event
+            print("Warning: Skipping duplicate event: %s" % event)
             continue
 
         if isGeneric:
@@ -357,7 +357,7 @@ def main():
                     continue
             else:
                 # Compare samples groups together in a wilcoxon rank sum test
-                [col_excl, col_incl] = map(int,counts[i].split(";"))
+                [col_excl, col_incl] = list(map(int,counts[i].split(";")))
 
                 # Both samples have to be non-zero
                 if belowThreshold(sum_thresh, col_excl, col_incl):
@@ -456,8 +456,8 @@ def main():
             right_min_psi = 200
             right_max_psi = -1
             for j in range(total_samples):
-                [left_col_excl, left_col_incl] = map(int,left_events2counts[event][j].split(";"))
-                [right_col_excl, right_col_incl] = map(int,right_events2counts[event][j].split(";"))
+                [left_col_excl, left_col_incl] = list(map(int,left_events2counts[event][j].split(";")))
+                [right_col_excl, right_col_incl] = list(map(int,right_events2counts[event][j].split(";")))
 
                 # Both samples have to be non-zero
                 if (belowThreshold(sum_thresh, left_col_excl, left_col_incl)
@@ -623,7 +623,7 @@ def checkSamples(sampleList, sample_set):
 
     for samp in sample_set:
         if samp not in sampleList:
-            print "Warning: Sample in sample set not in data: %s" % samp
+            print("Warning: Sample in sample set not in data: %s" % samp)
             continue
         checkedSamples.append(samp)
 
@@ -650,7 +650,7 @@ def getPSI_sample_sum(excl_incl_ct_str, sum_thresh):
         excl = float(excl_str)
         incl = float(incl_str)
     except:
-        print "Warning: Bad counts for PSI"
+        print("Warning: Bad counts for PSI")
         return (NA, NA)
 
     if (excl + incl) <  sum_thresh:  

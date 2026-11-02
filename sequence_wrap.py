@@ -4,7 +4,7 @@
 # Description: A wrapper class to reduce coding when trying to use dna sequences
 # using Biopython
 # Modification Date(s):
-# 
+#
 # class DNA:
 #    __init__(self, sequence)
 #    __str__(self)
@@ -24,16 +24,13 @@
 
 import sys, getopt, pdb
 
-from string import maketrans
-
-from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 ###########
 #CONSTANTS#
 ###########
 
-DNA_ALPHABET = IUPAC.unambiguous_dna
-    
+DNA_ALPHABET = None
+
 ###############
 #END CONSTANTS#
 ###############
@@ -44,33 +41,53 @@ DNA_ALPHABET = IUPAC.unambiguous_dna
 #########
 class DNA:
     def __init__ (self, sequence):
-        self.seq = Seq( sequence, DNA_ALPHABET )
+        self.seq = Seq(str(sequence))
     def __str__ (self):
-        return self.seq.tostring()
+        return str(self.seq)
     def __add__ (self, other):
         if isinstance(other,DNA):
-            return self.__class__(self.seq.__add__(other.seq).tostring())
+            return self.__class__(str(self.seq + other.seq))
         elif type(other) == type(""):
-            return self.__class__(self.seq.__add__(DNA(other)).tostring())
+            return self.__class__(str(self.seq + DNA(other).seq))
         else:
-            raise TypeError, ("adding incompatible types")
+            raise TypeError(("adding incompatible types"))
     def __getslice__(self, i,j):
-        return self.__class__(self.seq[i:j].tostring())
+        return self.__class__(str(self.seq[i:j]))
     def __getitem__(self,i):
+        if isinstance(i, slice):
+            return self.__class__(str(self.seq[i]))
         return self.seq[i]
     def __len__(self):
         return len(self.seq)
     def __cmp__(self, other):
         if isinstance(other,DNA):
-            return cmp(self.seq.tostring().upper(),other.seq.tostring().upper())
+            return (str(self.seq).upper() > str(other.seq).upper()) - (str(self.seq).upper() < str(other.seq).upper())
         elif type(other) == type(""):
-            return cmp(self.seq.tostring().upper(),other.upper())
+            return (str(self.seq).upper() > other.upper()) - (str(self.seq).upper() < other.upper())
         else:
-            raise TypeError, ("comparing incompatible types")
+            raise TypeError(("comparing incompatible types"))
 
-    
+    def __eq__(self, other):
+        return self.__cmp__(other) == 0
+
+    def __ne__(self, other):
+        return self.__cmp__(other) != 0
+
+    def __lt__(self, other):
+        return self.__cmp__(other) < 0
+
+    def __le__(self, other):
+        return self.__cmp__(other) <= 0
+
+    def __gt__(self, other):
+        return self.__cmp__(other) > 0
+
+    def __ge__(self, other):
+        return self.__cmp__(other) >= 0
+
+
     def tostring (self):
-        return self.seq.tostring()
+        return str(self.seq)
 
     def prettyString(self, lineLen=50):
         """
@@ -79,7 +96,7 @@ class DNA:
         """
         s = self.tostring()
         ps = ""
-        
+
         for k in range(1,len(s) + 1):
             ps += s[k-1]
             if k % lineLen == 0:
@@ -89,27 +106,27 @@ class DNA:
         if not ps.endswith("\n"):
             ps += "\n"
 
-        return ps 
+        return ps
 
     # Used to extract a subsequence of the DNA sequence.  The start and end are
     # indexed starting with 1, like real sequences are.
     def extractSeq(self, start, end):
-        return self.__class__(self.seq[start-1:end].tostring())
+        return self.__class__(str(self.seq[start-1:end]))
 
     def reverseComplement(self):
-        l = list(self.seq.tostring().translate(maketrans("atcgATCG","tagcTAGC")))    
+        l = list(str(self.seq).translate(str.maketrans("atcgATCG", "tagcTAGC")))
         l.reverse()
         return self.__class__(''.join(l))
     def find (self, other):
         if type(other) == type(""):
-            return self.seq.tostring().find(other)
+            return str(self.seq).find(other)
 
-        return self.seq.tostring().find(other.seq.tostring())
+        return str(self.seq).find(str(other.seq))
     def removeN (self):
-        seq_str = self.seq.tostring()
+        seq_str = str(self.seq)
         seq_str = seq_str.replace("N","")
         seq_str = seq_str.replace("n","")
-        return self.__class__(seq_str)    
+        return self.__class__(seq_str)
 
 
 class Locus:
@@ -123,7 +140,7 @@ class Locus:
         self.end = end
         self.score = score
         self.strand = strand
-        self.frame = frame 
+        self.frame = frame
         self.attributes = attributes # This will likely be a gene name
 
     def __str__(self):
@@ -132,8 +149,8 @@ class Locus:
         """
         strand = self.strand
         if self.strand is None:
-            strand = "." 
-    
+            strand = "."
+
         feature = self.feature
         if self.feature is None:
             feature = ""
@@ -141,7 +158,7 @@ class Locus:
         attributes = self.attributes
         if self.attributes is None:
             attributes = ""
- 
+
         s = "%s\t%s\t%s\t%d\t%d\t" % (self.seqname,
                                       self.source,
                                       feature,
@@ -160,55 +177,55 @@ class Locus:
             s += "\t"
 
         s += "%s" % self.attributes
-                                     
+
         return s
 #############
 #END CLASSES#
 #############
- 
+
 ######
-#MAIN#    
+#MAIN#
 ######
 def main():
     seq1 = DNA("GATACA")
-    print "The sequence is: %s" % seq1
+    print("The sequence is: %s" % seq1)
 
-    print "The sequences at positions 2-4 of",
-    print "seq1 is: %s" % seq1.extractSeq(2,4)
+    print("The sequences at positions 2-4 of", end=' ')
+    print("seq1 is: %s" % seq1.extractSeq(2,4))
 
     seq2 = DNA("TTTT")
     seq3 = seq1 + seq2
-    print "Adding to the sequence: %s" % seq3
+    print("Adding to the sequence: %s" % seq3)
 
     seq4 = seq1 + DNA("GTATAT")
-    print "Adding something different: %s" % seq4
+    print("Adding something different: %s" % seq4)
 
     seq4 = seq4 + DNA("TTTC")
-    print "Adding even more to previous: %s" % seq4
+    print("Adding even more to previous: %s" % seq4)
 
-    print "length is: %d" % len(seq4)
+    print("length is: %d" % len(seq4))
 
     seq5 = seq4[0:3]
-    print "The first codon is: %s" % seq5
-    print type(seq5)
+    print("The first codon is: %s" % seq5)
+    print(type(seq5))
 
     seq6 = seq4.reverseComplement()
-    print "The reverse complement is: %s" % seq6    
+    print("The reverse complement is: %s" % seq6)
 
     str_sequence = seq6.tostring()
-    print "Now it is a string: %s" % str_sequence
-    print "See this is why: %s" % str_sequence.lower()    
+    print("Now it is a string: %s" % str_sequence)
+    print("See this is why: %s" % str_sequence.lower())
 
     motif = DNA("TACT")
-    print "The motif was found at: %d" % seq6.find(motif)
+    print("The motif was found at: %d" % seq6.find(motif))
 
     seq7 = DNA("TTAGT")
     seq8 = DNA("TTAGt")
 
-    print seq7 == seq8    
+    print(seq7 == seq8)
 
     find_str = "TACT"
-    print "The string motif was found at:%d" % seq6.find(find_str)
+    print("The string motif was found at:%d" % seq6.find(find_str))
 
 ##########
 #END_MAIN#
@@ -224,6 +241,6 @@ def formatLine( line ):
     return line
 
 ###############
-#END FUNCTIONS#    
-###############    
+#END FUNCTIONS#
+###############
 if __name__ == "__main__": main()

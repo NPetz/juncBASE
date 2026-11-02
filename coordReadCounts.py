@@ -41,7 +41,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -132,13 +132,13 @@ def main():
     opt_parser.check_required("-o")
 
     if (not options.read_file) and (not options.sam_file):
-        print "Must provide a read file."
+        print("Must provide a read file.")
         sys.exit(1)
 
     isSam = False
     if options.read_file:
         if options.read_file.endswith(".gz"):
-            read_file = gzip.open(options.read_file, "rb")
+            read_file = gzip.open(options.read_file, "rt")
         else:
             read_file = open(options.read_file)
     else:
@@ -154,22 +154,22 @@ def main():
     read_len = options.read_len
 
     if options.coord_file is None and options.db_name is None:
-        print "Need to specify a coordinate file or database name and table."
+        print("Need to specify a coordinate file or database name and table.")
         opt_parser.print_help()
         sys.exit(1)
 
     if options.coord_file and options.db_name:
-        print "Only specify a coordinate file OR a database name and table."
+        print("Only specify a coordinate file OR a database name and table.")
         opt_parser.print_help()
         sys.exit(1)
 
     if options.db_name and options.table is None:
-        print "Need to specify a table name."
+        print("Need to specify a table name.")
         opt_parser.print_help()
         sys.exit(1)
    
     # Status
-    print "Creating tree"
+    print("Creating tree")
     if options.coord_file:
         coord_file = open(options.coord_file)
 
@@ -191,7 +191,7 @@ def main():
 
 
     # Status
-    print "Processing Reads"
+    print("Processing Reads")
     for line in read_file:
         line = formatLine(line)
 
@@ -217,7 +217,7 @@ def main():
                 if read_len:
                     end = start + read_len - 1
                 else:
-                    print "Expecting read length: %d" % read_len
+                    print("Expecting read length: %d" % read_len)
                     sys.exit(1)
 
         if chr.startswith("chr"):

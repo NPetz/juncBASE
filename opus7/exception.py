@@ -21,8 +21,6 @@ __version__ = "$Revision: 1.14 $"
 __credits__ = "Copyright (c) 2003 by Bruno R. Preiss, P.Eng."
 
 import sys
-import exceptions
-
 class InternalError(Exception):
     """
     Raised when situation arises that should never occur.
@@ -50,7 +48,7 @@ class ContainerFull(StateError):
 
 def main(*argv):
     "Exceptions test program."
-    print main.__doc__
+    print(main.__doc__)
     return 0
 
 if __name__ == "__main__":

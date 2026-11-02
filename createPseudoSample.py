@@ -41,7 +41,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -92,7 +92,7 @@ def main():
     if os.path.exists(options.input_dir):
         input_dir = os.path.abspath(options.input_dir)
     else:
-        print "Input directory does not exist."
+        print("Input directory does not exist.")
         opt_parser.print_help()
         sys.exit(1)
     if input_dir.endswith("/"):
@@ -108,7 +108,7 @@ def main():
         # grab chr names from preProcess.bed files
         chrs = getChr(input_dir)
         if chrs == []:
-            print "Missing bed files from preProcess_getASEventReadCounts_by_chr_step2.py. They should be in: %s" % input_dir
+            print("Missing bed files from preProcess_getASEventReadCounts_by_chr_step2.py. They should be in: %s" % input_dir)
             opt_parser.print_help()
             sys.exit(1)
 
@@ -134,7 +134,7 @@ def main():
     if "all" in chr2pseudo_dir:
         bed_file = input_dir + "/tmp_preProcess_getASEventReadCounts_step2.bed"
         if not os.path.exists(bed_file):
-            print "Missing %s. Please run preProcess_getASEventReadCounts_step2.py" % bed_file
+            print("Missing %s. Please run preProcess_getASEventReadCounts_step2.py" % bed_file)
             sys.exit(1)
 
         ln_cmd = "ln -s %s %s/pseudo_junctions.bed" % (bed_file,
@@ -155,8 +155,8 @@ def main():
         i_e_file = input_dir + "/%s/%s_intron_exon_junction_counts.txt" % (samp,
                                                                            samp)
         if not os.path.exists(i_e_file):
-            print "Missing file %s." % i_e_file
-            print "Please run preProcess_getASEventReadCounts_step3.py on sample %s." % samp
+            print("Missing file %s." % i_e_file)
+            print("Please run preProcess_getASEventReadCounts_step3.py on sample %s." % samp)
             sys.exit(1)
 
         ln_cmd = "ln -s %s %s/pseudo_intron_exon_junction_counts.txt" % (i_e_file,
@@ -169,9 +169,9 @@ def main():
                                                                                         samp, chr,
                                                                                         samp, chr)
             if not os.path.exists(i_e_file):
-                print "Missing file %s." % i_e_file
-                print "Please run preProcess_getASEventReadCounts_step3.py on sample %s and chr %s." % (samp,
-                                                                                                        chr)
+                print("Missing file %s." % i_e_file)
+                print("Please run preProcess_getASEventReadCounts_step3.py on sample %s and chr %s." % (samp,
+                                                                                                        chr))
                 sys.exit(1)
 
             ln_cmd = "ln -s %s %s/pseudo_%s_intron_exon_junction_counts.txt" % (i_e_file,
@@ -186,7 +186,7 @@ def main():
         pseudo_genome_file = pseudo_dir + "/pseudo_genome_reads.txt.gz"
         
         if not os.path.exists(genome_file):
-            print "Missing file %s" % genome_file
+            print("Missing file %s" % genome_file)
             sys.exit(1)
 
         genome_fh = gzip.open(genome_file, "rb")
@@ -212,7 +212,7 @@ def main():
             pseudo_file = chr2pseudo_dir[chr] + "/pseudo_%s_genome_reads.txt.gz" % chr
 
             if not os.path.exists(genome_file):
-                print "Missing file %s" % genome_file
+                print("Missing file %s" % genome_file)
                 sys.exit(1)
 
             genome_fh = gzip.open(genome_file, "rb")

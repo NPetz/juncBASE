@@ -37,7 +37,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -187,7 +187,7 @@ def main():
                             this_event_list = this_event.split("\t")
                             out_2_not_1.write("\t".join(this_event_list[:-1]) + "\n")
                     else:
-                        print "Error in redundant group: %s" % repr(rGroup)
+                        print("Error in redundant group: %s" % repr(rGroup))
                 
 
     out_1_and_2.close()

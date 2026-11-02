@@ -29,7 +29,7 @@ DEF_PVAL_CUTOFF = 0.05
 BIN_DIR = os.path.realpath(os.path.dirname(sys.argv[0]))
 COORD_COUNT = "%s/coordReadCounts.py" % BIN_DIR
 if not os.path.exists(COORD_COUNT):
-    print "ERROR: coordReadCounts.py needs to be in the same directory."
+    print("ERROR: coordReadCounts.py needs to be in the same directory.")
     sys.exit(1)
 
 HOST = "localhost"
@@ -54,7 +54,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -204,7 +204,7 @@ def main():
 
     # {chr: set[(start, end, strand)])
 #    annotated_introns = getAnnotatedIntronCoords(db, as_db, this_chr)
-    intron_pk_file = open(options.intron_pk_file)
+    intron_pk_file = open(options.intron_pk_file, "rb")
     annotated_introns = pickle.load(intron_pk_file)
     intron_pk_file.close()
 
@@ -213,7 +213,7 @@ def main():
 #    annotated_exons_no_strand,
 #    annotated_exons_by_strand,
 #    annotated_exon_search_tree) = getAnnotatedExonCoords(db, as_db, this_chr)
-    exon_pk_file = open(options.exon_pk_file)
+    exon_pk_file = open(options.exon_pk_file, "rb")
     annotated_exons_by_strand = pickle.load(exon_pk_file)
     exon_pk_file.close()
 
@@ -382,9 +382,9 @@ def getAllEventInfoLine(combined_line, intron, annotated_exons, annotated_intron
     if const_str:
         const_regions.append(const_str)
 
-    ie_ct_list_raw = map(int, ie_cts_raw.split(";"))
+    ie_ct_list_raw = list(map(int, ie_cts_raw.split(";")))
 
-    ie_ct_list_lenNorm = map(int, ie_cts_lenNorm.split(";"))
+    ie_ct_list_lenNorm = list(map(int, ie_cts_lenNorm.split(";")))
 
     ie_ct_raw = 0
     for ct in ie_ct_list_raw:

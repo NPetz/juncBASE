@@ -46,7 +46,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -142,11 +142,11 @@ def main():
                                                                   samp, chr,
                                                                   samp, chr)
                 if not os.path.exists(check_file):
-                    print "Cannot find: %s" % check_file 
+                    print("Cannot find: %s" % check_file) 
                     continue
 
                 if os.path.getsize(check_file) == 0:
-                    print "File is empty: %s" % check_file
+                    print("File is empty: %s" % check_file)
                     continue
         if check:
             continue
@@ -181,7 +181,7 @@ def main():
         ctr += 1
 
         if ctr % num_processes == 0:
-            print cmd
+            print(cmd)
 #            runCmd(cmd, SHELL, True)
             sys.stdout.flush()
             p = Popen(cmd, shell=True, executable=SHELL)
@@ -191,7 +191,7 @@ def main():
 
             children = []
         else:
-            print cmd
+            print(cmd)
             sys.stdout.flush()
             p = Popen(cmd, shell=True, executable=SHELL)
             children.append(p)

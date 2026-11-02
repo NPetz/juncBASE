@@ -55,7 +55,7 @@ class Iterator(Object):
         return self
 
     @abstractmethod
-    def next(self): pass
+    def __next__(self): pass
 #}>a
 
     def _compareTo(self, obj):
@@ -69,7 +69,7 @@ class Iterator(Object):
     @staticmethod
     def main(*argv):
         "Iterator test program."
-        print Iterator.main.__doc__
+        print(Iterator.main.__doc__)
 
 if __name__ == "__main__":
     sys.exit(Iterator.main(*sys.argv))

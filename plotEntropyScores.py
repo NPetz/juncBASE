@@ -47,7 +47,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -265,34 +265,34 @@ def parseSAMFile(sam_file, known_junctions, isBam):
             i_count = cigar.count("I")
             if i_count > 0:
                 if not insertionFlag:
-                    print "Not supporting insertions, yet e.g., %s" % cigar
+                    print("Not supporting insertions, yet e.g., %s" % cigar)
                 insertionFlag = True
                 continue
 
             d_count = cigar.count("D")
             if d_count > 0:
                 if not deletionFlag:
-                    print "Not supporting deletions, yet e.g., %s" % cigar
+                    print("Not supporting deletions, yet e.g., %s" % cigar)
                 deletionFlag = True
                 continue
 
             s_count = cigar.count("S")
             if s_count > 0:
                 if not softclipFlag:
-                    print "Not supporting softclipping, yet e.g., %s" % cigar
+                    print("Not supporting softclipping, yet e.g., %s" % cigar)
                 softclipFlag = True
                 continue
 
             h_count = cigar.count("H")
             if h_count > 0:
                 if not hardclipFlag:
-                    print "Not supporting hardclipping, yet e.g., %s" % cigar
+                    print("Not supporting hardclipping, yet e.g., %s" % cigar)
                 hardclipFlag = True
                 continue
 
 
             if n_count == 0:
-                print "Expecting a junction read: %s" % cigar
+                print("Expecting a junction read: %s" % cigar)
                 continue
 
             n_split = cigar.split("N")
@@ -308,7 +308,7 @@ def parseSAMFile(sam_file, known_junctions, isBam):
 
             # Get first intron information which also will be used for the
             # upstream length
-            upstr_len, intron_len = map(int, n_split.pop(0).split("M"))
+            upstr_len, intron_len = list(map(int, n_split.pop(0).split("M")))
             introns_info.append((chr_start, intron_len, None))
             # Updating the chr_start
             chr_start = chr_start + upstr_len + intron_len
@@ -317,7 +317,7 @@ def parseSAMFile(sam_file, known_junctions, isBam):
             # any
             # 3rd element is used in calculating entropy
             for remaining_intron in n_split:
-                exon_len, intron_len = map(int, remaining_intron.split("M"))
+                exon_len, intron_len = list(map(int, remaining_intron.split("M")))
                 introns_info.append((chr_start + exon_len - upstr_len,
                                      intron_len,
                                      chr_start - first_chr_start))
@@ -336,7 +336,7 @@ def parseSAMFile(sam_file, known_junctions, isBam):
                     jcn_strand = almost_strand.lstrip(":")
 
                     if jcn_strand != "+" and jcn_strand != "-" and jcn_strand != ".":
-                        print "Error in strand information for: %s" % line
+                        print("Error in strand information for: %s" % line)
                         sys.exit(1)
 
             # Now insert all introns into jcn dictionary.

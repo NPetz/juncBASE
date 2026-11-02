@@ -71,7 +71,7 @@ class BinarySearchTree(BinaryTree, SearchTree):
         """
         if self.isEmpty:
             return None
-        diff = cmp(obj, self._key)
+        diff = (obj > self._key) - (obj < self._key)
         if diff == 0:
             return self._key
         elif diff < 0:
@@ -113,7 +113,7 @@ class BinarySearchTree(BinaryTree, SearchTree):
         if self.isEmpty:
             self.attachKey(obj)
         else:
-            diff = cmp(obj, self._key)
+            diff = (obj > self._key) - (obj < self._key)
             if diff == 0:
                 raise ValueError
             elif diff < 0:
@@ -149,7 +149,7 @@ class BinarySearchTree(BinaryTree, SearchTree):
         """
         if self.isEmpty:
             raise KeyError
-        diff = cmp(obj, self._key)
+        diff = (obj > self._key) - (obj < self._key)
         if diff == 0:
             if not self._left.isEmpty:
                 max = self._left.max
@@ -171,7 +171,7 @@ class BinarySearchTree(BinaryTree, SearchTree):
     @staticmethod
     def main(*argv):
         "BinarySearchTree test program."
-        print BinarySearchTree.main.__doc__
+        print(BinarySearchTree.main.__doc__)
         tree = BinarySearchTree()
         SearchTree.test(tree)
         return 0

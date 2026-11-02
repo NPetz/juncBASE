@@ -23,8 +23,16 @@ import sys
 from opus7.abstractmethod import abstractmethod
 from opus7.metaclass import Metaclass
 
+
+def cmp(left, right):
+    """Return Python 2 style three-way comparison for ordered values."""
+    compare = getattr(left, "__cmp__", None)
+    if compare is not None:
+        return compare(right)
+    return (left > right) - (left < right)
+
 #{
-class Object(object):
+class Object(object, metaclass=Metaclass):
     """
     Base class from which all objects are derived.
     """
@@ -58,20 +66,16 @@ class Object(object):
 
     @abstractmethod
     def _compareTo(self, obj): pass
-#}>a
-
-#{
-    __metaclass__ = Metaclass
 #}>b
 
     @staticmethod
     def main(*argv):
         "Object test program."
-        print Object.main.__doc__
+        print(Object.main.__doc__)
         try:
             object = Object()
-        except TypeError, msg:
-            print "Caught TypeError: %s" % str(msg)
+        except TypeError as msg:
+            print("Caught TypeError: %s" % str(msg))
         return 0
 
 if __name__ == "__main__":

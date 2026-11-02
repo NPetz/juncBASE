@@ -39,7 +39,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -71,79 +71,79 @@ def main():
 
     coord_tree = getSearchTree(coord_list)
 
-    print "Test 1"
+    print("Test 1")
     if hasOuterContainer(coord_tree, (8,25)):
-        print "Pass"
+        print("Pass")
     else:
-        print "Fail"
+        print("Fail")
 
-    print ""
+    print("")
 
-    print "Test 2"
+    print("Test 2")
     if hasOuterContainer(coord_tree, (150,250)):
-        print "Fail"
+        print("Fail")
     else:
-        print "Pass"
+        print("Pass")
 	
-    print ""
+    print("")
 
 
-    print "Test 3"
+    print("Test 3")
     if hasOuterContainer(coord_tree, (74,180)):
-        print "Pass"
+        print("Pass")
     else:
-        print "Fail"
+        print("Fail")
 
-    print ""
+    print("")
 
-    print "Test 4"
+    print("Test 4")
     if hasOuterContainer(coord_tree, (30,60)):
-        print "Fail"
+        print("Fail")
     else:
-        print "Pass"
+        print("Pass")
 
-    print
-    print "List of coords: %s" % coord_list
+    print()
+    print("List of coords: %s" % coord_list)
 
-    print "Test 5"
+    print("Test 5")
     internalCoords1 = []   
     findInternalCoords(coord_tree, internalCoords1, (8,25))
-    print "Coords in between (8,25):"
-    print internalCoords1
+    print("Coords in between (8,25):")
+    print(internalCoords1)
     
-    print "Test 6"
+    print("Test 6")
     internalCoords2 = []   
     findInternalCoords(coord_tree, internalCoords2, (50,75))
-    print "Coords in between (50,75):"
-    print internalCoords2
+    print("Coords in between (50,75):")
+    print(internalCoords2)
 
-    print "Test 7"
+    print("Test 7")
     internalCoords3 = []   
     findInternalCoords(coord_tree, internalCoords3, (50,150))
-    print "Coords in between (50,150):"
-    print internalCoords3
-    print
+    print("Coords in between (50,150):")
+    print(internalCoords3)
+    print()
 
-    print "Test 8"
+    print("Test 8")
     if hasOverlap(coord_tree, (8,25)):
-        print "Pass"
+        print("Pass")
     else:
-        print "Fail"
-    print
+        print("Fail")
+    print()
 
-    print "Test 9"
+    print("Test 9")
     if hasOverlap(coord_tree, (50,75)):
-        print "Fail"
+        print("Fail")
     else:
-        print "Pass"
-    print
+        print("Pass")
+    print()
 
-    print "Test 10"
+    print("Test 10")
     if hasOverlap(coord_tree, (70,200)):
-        print "Pass"
+        print("Pass")
     else:
-        print "Fail"
-    print
+        print("Fail")
+    print()
 
     sys.exit(0)
 
@@ -281,9 +281,9 @@ def getSearchTree(coord_list):
     for coord in coord_list_set:
         # ERROR CHECKING
         if type(coord) != type((1,2)):
-            raise TypeError, ("List should be of tuples")
+            raise TypeError(("List should be of tuples"))
         if len(coord) != 2:
-            raise ValueError, ("Tuple should only have two elements)")
+            raise ValueError(("Tuple should only have two elements)"))
         # Will raise exception if the coordinates are not numbers
         val_check = coord[1] - coord[0]
 

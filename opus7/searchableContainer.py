@@ -53,7 +53,7 @@ class SearchableContainer(Container):
     @staticmethod
     def main(*argv):
         "SearchableContainer test program."
-        print SearchableContainer.main.__doc__
+        print(SearchableContainer.main.__doc__)
         return 0
 
 if __name__ == "__main__":

@@ -40,7 +40,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -143,7 +143,7 @@ def buildDictionaries(event, as_type2event2pval, as_type2chr2strand2redundantGro
 
     if as_type in as_type2event2pval:
         if event in as_type2event2pval[as_type]:
-            print "WARNING: Duplicate event exists."
+            print("WARNING: Duplicate event exists.")
             if pval > as_type2event2pval[as_type][event]:
                 # Lowest pval is selected
                 pval = as_type2event2pval[as_type][event]
@@ -225,7 +225,7 @@ def get_mad(line_list):
     
     vals_str = fixMissingVals(vals_str)
 
-    vals = map(float, vals_str) 
+    vals = list(map(float, vals_str)) 
 
     abs_mad_val = abs(robjects.r['mad'](robjects.FloatVector(vals))[0])
 

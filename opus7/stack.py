@@ -51,16 +51,16 @@ class Stack(Container):
     @staticmethod
     def test(stack):
         "Stack test program."
-        print Stack.test.__doc__
-        for i in xrange(6):
+        print(Stack.test.__doc__)
+        for i in range(6):
             if not stack.isFull:
                 stack.push(i)
-        print stack
-	print "Using iterator"
-	for obj in stack:
-	    print obj
-	print "Top is", stack.top
-        print "Popping"
+        print(stack)
+        print("Using iterator")
+        for obj in stack:
+            print(obj)
+        print("Top is", stack.top)
+        print("Popping")
         while not stack.isEmpty:
             obj = stack.pop()
-            print obj
+            print(obj)

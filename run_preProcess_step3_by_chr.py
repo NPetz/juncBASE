@@ -23,7 +23,7 @@ SHELL = "/bin/tcsh"
 BIN_DIR = os.path.realpath(os.path.dirname(sys.argv[0]))
 SCRIPT = "%s/preProcess_getASEventReadCounts_step3.py" % BIN_DIR
 if not os.path.exists(SCRIPT):
-    print "ERROR: preProcess_getASEventReadCounts_step3.py needs to be in the same directory."
+    print("ERROR: preProcess_getASEventReadCounts_step3.py needs to be in the same directory.")
     sys.exit(1)
 
 DEF_OVERHANG = 6
@@ -50,7 +50,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -163,12 +163,12 @@ def main():
             try:
                 if os.path.getsize(expected_out_file) == 0:
                     if check:
-                        print "File is empty: %s" % expected_out_file 
+                        print("File is empty: %s" % expected_out_file) 
                 else:
                     file_is_present = True
             except:
                 if check:
-                    print "Does not exist: %s" % expected_out_file
+                    print("Does not exist: %s" % expected_out_file)
            
             if check: 
                 continue
@@ -192,7 +192,7 @@ def main():
                 if ctr % num_processes == 0:
                     os.system(cmd)
                 else:
-                    print cmd
+                    print(cmd)
                     Popen(cmd, shell=True, executable=SHELL)
             else:
                 tmp_file = "%s/tmp.txt" % os.curdir

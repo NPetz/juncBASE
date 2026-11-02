@@ -100,7 +100,7 @@ class QueueAsLinkedList(Queue):
             visitor.visit(ptr.datum)
             if visitor.isDone:
                 return
-            ptr = ptr.next
+            ptr = ptr.__next__
 
     class Iterator(Iterator):
         """
@@ -115,7 +115,7 @@ class QueueAsLinkedList(Queue):
             super(QueueAsLinkedList.Iterator).__init__(queue)
             self._position = None
 
-        def next(self):
+        def __next__(self):
             """
             (QueueAsLinkedList.Iterator) -> Object
             Returns the next element.
@@ -123,7 +123,7 @@ class QueueAsLinkedList(Queue):
             if self._position is None:
                 self._position = self._container._list.head
             else:
-                self._position = self._position.next
+                self._position = self._position.__next__
             if self._position is None:
                 raise StopIteration
             return self._position.datum
@@ -147,7 +147,7 @@ class QueueAsLinkedList(Queue):
     @staticmethod
     def main(*argv):
         "QueueAsLinkedList test program."
-        print QueueAsLinkedList.main.__doc__
+        print(QueueAsLinkedList.main.__doc__)
         queue2 = QueueAsLinkedList()
         Queue.test(queue2)
         return 0

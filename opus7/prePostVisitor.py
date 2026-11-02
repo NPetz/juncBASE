@@ -68,9 +68,9 @@ class PrePostVisitor(Visitor):
     @staticmethod
     def main(*argv):
         "PrePostVisitor test program."
-        print PrePostVisitor.main.__doc__
+        print(PrePostVisitor.main.__doc__)
         v = PrePostVisitor()
-        print v.isDone
+        print(v.isDone)
         return 0
 
 if __name__ == "__main__":

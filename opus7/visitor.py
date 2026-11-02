@@ -71,9 +71,9 @@ class Visitor(Object):
     @staticmethod
     def main(*argv):
         "Visitor test program."
-        print Visitor.main.__doc__
+        print(Visitor.main.__doc__)
         v = Visitor()
-        print v.isDone
+        print(v.isDone)
         return 0
 
 if __name__ == "__main__":

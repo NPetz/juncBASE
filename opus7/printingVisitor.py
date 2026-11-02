@@ -40,8 +40,8 @@ class PrintingVisitor(Visitor):
         Prints the object.
         """
         if self._comma:
-            print ", ",
-        print obj,
+            print(", ", end=' ')
+        print(obj, end=' ')
         self._comma = True
 
     def finish(self):
@@ -49,5 +49,5 @@ class PrintingVisitor(Visitor):
         (PrintingVisitor) -> None
         Finishes the line.
         """
-        print ""
+        print("")
         self._comma = False

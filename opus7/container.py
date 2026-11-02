@@ -152,23 +152,23 @@ class Container(Object):
         (Container) -> int
         Returns the hash of this container.
         """
-	result = hash(self.__class__)
-	for obj in self:
-	    result = (result + hash(obj)) & sys.maxint
-	return result
+        result = hash(self.__class__)
+        for obj in self:
+            result = (result + hash(obj)) & sys.maxsize
+        return result
 #}>e
 
     @staticmethod
     def main(*argv):
         "Container test program."
-        print Container.main.__doc__
+        print(Container.main.__doc__)
 
         class Dummy(Container):
             def _compareTo(self, obj): pass
             def purge(self): pass
             def __iter__(self): pass
         container = Dummy()
-        print container._count
+        print(container._count)
         return 0
 
 if __name__ == "__main__":

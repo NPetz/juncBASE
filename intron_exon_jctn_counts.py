@@ -22,7 +22,7 @@ from getASEventReadCounts import convertCoordStr
 BIN_DIR = os.path.realpath(os.path.dirname(sys.argv[0]))
 COUNTING_SCRIPT = "%s/coordReadCounts.py" % BIN_DIR
 if not os.path.exists(COUNTING_SCRIPT):
-    print "ERROR: coordReadCounts.py needs to be in the same directory."
+    print("ERROR: coordReadCounts.py needs to be in the same directory.")
     sys.exit(1)
 
 SHELL = "/bin/tcsh"
@@ -45,7 +45,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -119,17 +119,17 @@ def main():
 
     # Check that the COUNTING_SCRIPT path is valid
     if not os.path.exists(COUNTING_SCRIPT):
-        print "Please change COUNTING_SCRIPT path."
+        print("Please change COUNTING_SCRIPT path.")
         opt_parser.print_help()
         sys.exit(1)
 
     if options.intron_coords and options.bed_intron_coords:
-        print "Only one type of intron coord can be used as input." 
+        print("Only one type of intron coord can be used as input.") 
         opt_parser.print_help()
         sys.exit(1)
 
     if (not options.intron_coords) and (not options.bed_intron_coords):   
-        print " Need to specify intron coordinates. See options -i or -b"
+        print(" Need to specify intron coordinates. See options -i or -b")
         opt_parser.print_help()
         sys.exit(1)
 
@@ -155,7 +155,7 @@ def main():
         out_dir += "/"
 
     if not os.path.exists(out_dir):
-        print "Output directory does not exist"
+        print("Output directory does not exist")
         sys.exit(1)
 
     # Intermediate Output Files
@@ -239,7 +239,7 @@ def main():
     rand_num = random.randrange(1,100000)
 
     # Get Read Counts
-    print "Getting Counts in Region"
+    print("Getting Counts in Region")
     cmd = "python %s --reads %s -l %d --coords %s -o %stmp%d.txt --read_assoc %s" % (COUNTING_SCRIPT,
                                                                           read_alignments,
                                                                           read_length,
@@ -247,7 +247,7 @@ def main():
                                                                           out_dir,
                                                                           rand_num,
                                                                           out_read_assoc_file)
-    print cmd
+    print(cmd)
 #    runCmd(cmd, SHELL)
     os.system(cmd)
 
@@ -255,7 +255,7 @@ def main():
 #    runCmd("rm %stmp%d.txt" % (out_dir, rand_num), SHELL)
     os.system("rm %stmp%d.txt" % (out_dir, rand_num))
 
-    print "Getting Left and Right Counts"
+    print("Getting Left and Right Counts")
     # Parse read_assoc_file to get information
     read_assoc_file = open(out_read_assoc_file)
 
@@ -389,8 +389,8 @@ def parseBEDLine(line):
 
     chromStart = int(input_list[1])
 
-    blockSizes = map(int, input_list[-2].split(","))
-    blockStarts = map(int, input_list[-1].split(","))
+    blockSizes = list(map(int, input_list[-2].split(",")))
+    blockStarts = list(map(int, input_list[-1].split(",")))
    
     intron_start = chromStart + blockSizes[0] + 1
     intron_end = chromStart + blockStarts[1]

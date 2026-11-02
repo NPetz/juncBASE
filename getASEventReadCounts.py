@@ -14,7 +14,7 @@
 # Copyright (c) 2011, Angela Brooks. anbrooks@gmail.com
 # All rights reserved.
 
-from __future__ import division
+
 
 import sys
 import optparse 
@@ -56,15 +56,15 @@ READ_LENGTH = 37
 BIN_DIR = os.path.realpath(os.path.dirname(sys.argv[0]))
 FISHER_SCRIPT = "%s/fisherTest_exclusionInclusion.py" % BIN_DIR
 if not os.path.exists(FISHER_SCRIPT):
-    print "ERROR: fisherTest_exclusionInclusion.py needs to be in the same directory."
+    print("ERROR: fisherTest_exclusionInclusion.py needs to be in the same directory.")
     sys.exit(1)
 IR_SCRIPT = "%s/getIntronRetentionEvents.py" % BIN_DIR
 if not os.path.exists(IR_SCRIPT):
-    print "ERROR: getIntronRetentionEvents.py needs to be in the same directory."
+    print("ERROR: getIntronRetentionEvents.py needs to be in the same directory.")
     sys.exit(1)
 COORD_COUNT = "%s/coordReadCounts.py" % BIN_DIR
 if not os.path.exists(COORD_COUNT):
-    print "ERROR: coordReadCounts.py needs to be in the same directory."
+    print("ERROR: coordReadCounts.py needs to be in the same directory.")
     sys.exit(1)
 
 SHELL = "/bin/tcsh"
@@ -88,7 +88,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -278,15 +278,15 @@ def main():
 
     # Checking paths of constants
     if not os.path.exists(FISHER_SCRIPT):
-        print "Change location of the fisher's script: %s" % FISHER_SCRIPT
+        print("Change location of the fisher's script: %s" % FISHER_SCRIPT)
         opt_parser.print_help()
         sys.exit(1)
     if not os.path.exists(IR_SCRIPT):
-        print "Change location of the IR script: %s" % IR_SCRIPT
+        print("Change location of the IR script: %s" % IR_SCRIPT)
         opt_parser.print_help()
         sys.exit(1)
     if not os.path.exists(COORD_COUNT):
-        print "Change location of coordReadCount.py: %s" % COORD_COUNT
+        print("Change location of coordReadCount.py: %s" % COORD_COUNT)
         opt_parser.print_help()
         sys.exit(1)
 
@@ -343,7 +343,7 @@ def main():
 
     if options.genome_reads1:
         if options.coord_counts1:
-            print "Must select either genome reads as input or coord counts."
+            print("Must select either genome reads as input or coord counts.")
             opt_parser.print_help()
             sys.exit(1)
         genome_read_file1 = options.genome_reads1
@@ -352,7 +352,7 @@ def main():
 
     if options.genome_reads2:
         if options.coord_counts2:
-            print "Must select either genome reads as input or coord counts."
+            print("Must select either genome reads as input or coord counts.")
             opt_parser.print_help()
             sys.exit(1)
         genome_read_file2 = options.genome_reads2
@@ -458,7 +458,7 @@ def main():
     # jcn_count_dict - {jcn_coord_str:(file1_count, file2_count)}
     # coord_start2end - {chr:{start:[end]}}
     # coord_end2start - {chr:{end:[start]}}
-    print "Parsing input."
+    print("Parsing input.")
 
     jcn_count_dict = None
     coord_start2end = None
@@ -471,7 +471,7 @@ def main():
      all_jcn2strand,
      all_jcn_search_tree) = parseJcns(jcn1_file, jcn2_file, genome_file, disambiguate_jcn_strand)
 
-    jcn_chrs = all_jcn_search_tree.keys()
+    jcn_chrs = list(all_jcn_search_tree.keys())
 
     # full_exon_count_dict = {chr_start_end:count}
     # start_exon_count_dict = {chr_start:sum of counts}
@@ -527,15 +527,15 @@ def main():
      alt_last_exon_search_tree) = getFirstLastExons(db, txt_db2, this_chr)
 
     if not annotated_exons:
-        print "ERROR: No exon entries in --txt_db1. Please check the \"exon\" table"
+        print("ERROR: No exon entries in --txt_db1. Please check the \"exon\" table")
         sys.exit(1)
 
     if annotated_genes == {}:
-        print "ERROR: No genes in --txt_db1. Please check the \"gene\" table"
+        print("ERROR: No genes in --txt_db1. Please check the \"gene\" table")
         sys.exit(1)
 
     if alt_first_exons == {} or alt_last_exons == {}:
-        print "ERROR: Error with transcripts in --txt_db2. Please check this database."
+        print("ERROR: Error with transcripts in --txt_db2. Please check this database.")
         sys.exit(1)
 
     chrCheck(jcn_chrs, alt_first_exons, "txt_db2:alt first exons")
@@ -615,7 +615,7 @@ def main():
     # excl_jcns = {chr:set(start, end)}
     excl_jcns = {}
 
-    print "Cassette Exons"
+    print("Cassette Exons")
     # cassette_exons = {chr:set(start,end)}
     cassette_exons = printCassetteExons(db, 
                                         alt_first_exons,
@@ -643,7 +643,7 @@ def main():
 
     cassette_out.close()
 
-    print "Mutually Exclusive"
+    print("Mutually Exclusive")
     # Cassette exons is updated in this function
     printMutuallyExclusive(db,
                            annotated_genes,
@@ -671,7 +671,7 @@ def main():
 
     me_out.close()
 
-    print "Multi-Cassette"
+    print("Multi-Cassette")
     printMultiCassetteExons(db,
                             annotated_genes,
                             annotated_genes_by_strand,
@@ -699,7 +699,7 @@ def main():
 
     mc_out.close()
 
-    print "Alternative Donors and Acceptors"
+    print("Alternative Donors and Acceptors")
     printAlternativeDonorsAcceptors(db,
                                     annotated_genes,
                                     annotated_genes_by_strand,
@@ -739,7 +739,7 @@ def main():
     ale_out.close()
     jcn_only_accept_out.close()
 
-    print "Intron Retention Events"
+    print("Intron Retention Events")
     if ir_count_dict is not None:
         printIREvents(db, annotated_genes, annotated_genes_by_strand, annotated_exons,
                       annotated_exons_by_strand, all_coord_start2end, all_coord_end2start,
@@ -820,7 +820,7 @@ def main():
             first_cmd = cmd + "--reads %s -o %s" % (genome_read_file1,
                                                     mapped_file1_name) 
                                 
-            print "Running: %s" % first_cmd
+            print("Running: %s" % first_cmd)
             os.system(first_cmd)
         else:
             mapped_file1_name = coord_counts1
@@ -837,7 +837,7 @@ def main():
             second_cmd = cmd + "--reads %s -o %s" % (genome_read_file2,
                                                      mapped_file2_name) 
                                 
-            print "Running: %s" % second_cmd
+            print("Running: %s" % second_cmd)
             os.system(second_cmd)
 
         else:
@@ -923,7 +923,7 @@ def main():
             annot_intron_pick_name = "%s_annotated_introns.pk" % prefix
         else:
             annot_intron_pick_name = "annotated_introns.pk"
-        intron_pick_file = open(annot_intron_pick_name, "w")
+        intron_pick_file = open(annot_intron_pick_name, "wb")
         pickle.dump(annotated_introns, intron_pick_file)
         intron_pick_file.close()
 
@@ -931,7 +931,7 @@ def main():
             annot_exon_pick_name = "%s_annoated_exons_by_strand.pk" % prefix
         else:
             annot_exon_pick_name = "annoated_exons_by_strand.pk"
-        exon_pick_file = open(annot_exon_pick_name, "w")
+        exon_pick_file = open(annot_exon_pick_name, "wb")
         pickle.dump(annotated_exons_by_strand, exon_pick_file)
         exon_pick_file.close()
 
@@ -1258,7 +1258,7 @@ def find_exon_clusters(next_or_previous, all_confident_exons,
             for (c_jcn_str, c_exon) in clusters[i]:
                 c_chr, c_exon_start, c_exon_end = convertCoordStr(c_exon)
                 if c_chr != chr:
-                    print "Error: chromosomes don't match"
+                    print("Error: chromosomes don't match")
                     sys.exit(1)
 
                 if coordsOverlap(this_exon_start, this_exon_end,
@@ -1338,7 +1338,7 @@ def updateCounts2AltDonorAccept(file_out_str,
         incl_end = int(line_list[6]) 
         excl_jcns = line_list[7].split(";")
 
-        exclusion_raw_list = map(int, excl_raw_str.split(";"))
+        exclusion_raw_list = list(map(int, excl_raw_str.split(";")))
 
         event_key = (incl_junction,
                      ";".join(excl_jcns))
@@ -1736,8 +1736,8 @@ def updateCounts2AFE_ALE(a_out_str,
         incl_raw = 0
         incl_lenNorm = 0
 
-        excl_raw_ct_list = map(int, line_list[7].split(";"))
-        excl_lenNorm_ct_list = map(int, line_list[9].split(";"))
+        excl_raw_ct_list = list(map(int, line_list[7].split(";")))
+        excl_lenNorm_ct_list = list(map(int, line_list[9].split(";")))
 
         excl_raw = 0
         excl_lenNorm = 0
@@ -1795,7 +1795,7 @@ def updateCounts2AFE_ALE(a_out_str,
         if incl_add_coord != "None":
             this_chr, incl_exon_start, incl_exon_end = convertCoordStr(incl_add_coord)
             incl_exon_len = incl_exon_end - incl_exon_start + 1
-            this_distal_jcn = findDistalJcn(distal_jcn2isoform_length.keys(), 
+            this_distal_jcn = findDistalJcn(list(distal_jcn2isoform_length.keys()), 
                                             incl_add_coord)
             if this_distal_jcn:
                 distal_jcn2isoform_length[this_distal_jcn] += incl_exon_len
@@ -1823,7 +1823,7 @@ def updateCounts2AFE_ALE(a_out_str,
             excl_add_coord_list = excl_add_coords.split(",")
 
             for excl_add_coord in excl_add_coord_list:
-                this_distal_jcn = findDistalJcn(distal_jcn2isoform_length.keys(), 
+                this_distal_jcn = findDistalJcn(list(distal_jcn2isoform_length.keys()), 
                                                 excl_add_coord)
 
                 if not this_distal_jcn:
@@ -2842,7 +2842,7 @@ def findExclSet(prox_excl_jcn, excl_jcns_full):
 
 
     # If not returned, there is some error
-    print "Error with AFE/ALE exclusion exons: %s" % excl_jcns_full
+    print("Error with AFE/ALE exclusion exons: %s" % excl_jcns_full)
     sys.exit(1)
 
     return None
@@ -3058,14 +3058,14 @@ def getFirstLastExons(db, txt_db, this_chr):
         exon_end = int(exon_row["end"])
 
         if strand != "+" and strand != "-":
-            print "Can't determine strand for gene: %s" % gene_name
+            print("Can't determine strand for gene: %s" % gene_name)
             continue
 
         all_chr_set.add(chr)
 
         if gene_name in gene2chr_strand:
             if (chr, strand) != gene2chr_strand[gene_name]:
-                print "Gene information does not agree in db: %s" % gene_name
+                print("Gene information does not agree in db: %s" % gene_name)
                 continue
         else:
             gene2chr_strand[gene_name] = (chr, strand)
@@ -3427,7 +3427,7 @@ def getCoordCounts4all_as_events(all_as_exon_str,
     sum_exon_ct_samp1, sum_exon_ct_samp2
     """
     if "," in all_as_exon_str:
-        print "Need to account for , in exon_str list"
+        print("Need to account for , in exon_str list")
         sys.exit(1)
 
     if all_as_exon_str == "" or all_as_exon_str == "None":
@@ -3540,7 +3540,7 @@ def getJcnStrandInfo(jcn2strand, genome_file):
     Organizes junctions into a new dictionary that is keyed by chromosome, then
     opens the chromosome files to get the junction sequences.
     """
-    print "Inferring Junction Strand Info"
+    print("Inferring Junction Strand Info")
     chr2jcns = {}
     for jcn in jcn2strand:
 
@@ -3559,14 +3559,14 @@ def getJcnStrandInfo(jcn2strand, genome_file):
     try:
         genome_fileh = open(genome_file)
     except:
-        print "Could not find the genome sequence."
+        print("Could not find the genome sequence.")
         sys.exit(1)
 
     for record in SeqIO.parse(genome_fileh, "fasta"):
         file_chr = formatChr(record.id)
         chr_seq = str(record.seq)
 
-        print "Inferring junctions on chromosome: %s" % file_chr
+        print("Inferring junctions on chromosome: %s" % file_chr)
 
         if file_chr in chr2jcns:
             for (chr, start, end) in chr2jcns[file_chr]:
@@ -3599,7 +3599,7 @@ def getJcnStrandInfo(jcn2strand, genome_file):
                 elif intron_seq.startswith("CT"):
                     jcn2strand[jcn_str] = "-"
                 else:
-                    print "Cannot find strand for %s" % jcn_str
+                    print("Cannot find strand for %s" % jcn_str)
                     
 def getJunctionProportion(chr, isoform_jcn,
                           all_jcn_count_dict,
@@ -6231,8 +6231,8 @@ def printMultiCassetteExons(db,
                                         incl_file2_count += \
                                                 full_multi_exon_count_dict[exon_str][1]
                                     if not exonFound:
-                                        print "No counts for multi-cassette: %s" %\
-                                               exon_str
+                                        print("No counts for multi-cassette: %s" %\
+                                               exon_str)
                         
                             else: # Just single reads, add junction counts
                                 # Inclusion_count
@@ -6454,7 +6454,7 @@ def printMutuallyExclusive(db,
     regions.
     """
     for chr in all_coord_start2end:
-        print "Mutually exclusive %s" % chr
+        print("Mutually exclusive %s" % chr)
         # Create mutually exclusive dictionary to look through
         # The dictionary is of the form:
         # {(upstream intron start, downstream intron end):[[(exon_start, exon_end),], 
@@ -6484,7 +6484,7 @@ def printMutuallyExclusive(db,
         # Check that all are annotated exons
         if annotated_exons:
             me_dict3 = {}
-            for me_coord in me_dict2.keys():
+            for me_coord in list(me_dict2.keys()):
                 for exon_list in me_dict2[me_coord]:
                     new_exon_list = []
                     coord_copy = list(exon_list)
@@ -7059,7 +7059,7 @@ def sumExclusion_Inclusion_counts(file_str,
         elif type == "intron_retention":
             required_indices = [13, 20]
         else:
-            print "Unknown type in: %s, %s" % (type, file_str)
+            print("Unknown type in: %s, %s" % (type, file_str))
 
         if printExonCoords:
             if type == "cassette":
@@ -7076,8 +7076,8 @@ def sumExclusion_Inclusion_counts(file_str,
         
         for required_idx in required_indices:
             if line_elems[required_idx] == "":
-                print "Problem with %s" % file_str
-                print "Line: %s" % line
+                print("Problem with %s" % file_str)
+                print("Line: %s" % line)
                 sys.exit(1)
 
         sum_excl_raw = 0
@@ -7210,11 +7210,11 @@ def translateInput(bed_line):
 
     # Input checking
     if len(input_list) != 12:
-        print "Error with BED file format."
+        print("Error with BED file format.")
         sys.exit(1)
 
     if int(input_list[-3]) != 2:
-        print "Cannot process reads that span more than one junciton."
+        print("Cannot process reads that span more than one junciton.")
         return None, None, None
 
     chr = input_list[0]
@@ -7226,8 +7226,8 @@ def translateInput(bed_line):
 
     chromStart = int(input_list[1])
 
-    blockSizes = map(int, input_list[-2].split(","))
-    blockStarts = map(int, input_list[-1].split(","))
+    blockSizes = list(map(int, input_list[-2].split(",")))
+    blockStarts = list(map(int, input_list[-1].split(",")))
     
     intron_start = chromStart + blockSizes[0] + 1
     intron_end = chromStart + blockStarts[1]
@@ -7238,7 +7238,7 @@ def translateInput(bed_line):
 
     if strand != "+" and strand != "-" and strand != ".":
         strand = None
-        print "Something wrong with strand of junction: %s\n" % bed_line
+        print("Something wrong with strand of junction: %s\n" % bed_line)
 
 #   if strand == ".":
 #       strand = None

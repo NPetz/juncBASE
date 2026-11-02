@@ -26,7 +26,7 @@ from createPseudoSample import getChr
 BIN_DIR = os.path.realpath(os.path.dirname(sys.argv[0]))
 SCRIPT = "%s/getASEventReadCounts.py" % BIN_DIR
 if not os.path.exists(SCRIPT):
-    print "ERROR: getASEventReadCounts.py needs to be in the same directory."
+    print("ERROR: getASEventReadCounts.py needs to be in the same directory.")
     sys.exit(1)
 
 SHELL = "/bin/tcsh"
@@ -55,7 +55,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -244,7 +244,7 @@ def main():
     if os.path.exists(options.input_dir):
         input_dir = os.path.abspath(options.input_dir)
     else:
-        print "Input directory does not exist."
+        print("Input directory does not exist.")
         opt_parser.print_help()
         sys.exit(1)
 
@@ -259,7 +259,7 @@ def main():
     else:
         os.mkdir(options.output_dir)
         output_dir = os.path.abspath(options.output_dir)
-        print "Creating output directory: %s" % output_dir
+        print("Creating output directory: %s" % output_dir)
 
     if output_dir.endswith("/"):
         output_dir = output_dir.rstrip("/")
@@ -316,11 +316,11 @@ def main():
                         file_is_present = True
                     else:
                         if check:
-                            print "File is empty: %s,%s,%s" % (samp, chr, expected_out_file)
+                            print("File is empty: %s,%s,%s" % (samp, chr, expected_out_file))
                 except:                                                              
                     if check:
-                        print "Does not exist: %s,%s,%s" % (samp, chr,
-                                                            expected_out_file)
+                        print("Does not exist: %s,%s,%s" % (samp, chr,
+                                                            expected_out_file))
 
                 if check:
                     continue
@@ -387,7 +387,7 @@ def main():
                     if not run_LSF:
                         if nice:
                             cmd = "nice " + cmd
-                    print cmd
+                    print(cmd)
                     continue
 
                 if run_LSF:
@@ -408,7 +408,7 @@ def main():
                 if ctr % num_processes == 0:
                     os.system(cmd)
                 else:
-                    print cmd
+                    print(cmd)
                     Popen(cmd, shell=True, executable=SHELL)
 
     else:
@@ -430,10 +430,10 @@ def main():
                     file_is_present = True
                 else:
                     if check:
-                        print "File is empty: %s,%s" % (samp, expected_out_file)
+                        print("File is empty: %s,%s" % (samp, expected_out_file))
             except:                                                              
                 if check:
-                    print "Does not exist: %s, %s" % (samp, expected_out_file)
+                    print("Does not exist: %s, %s" % (samp, expected_out_file))
             
             if check:
                 continue
@@ -483,7 +483,7 @@ def main():
                 if not run_LSF:
                     if nice:
                         cmd = "nice " + cmd
-                print cmd
+                print(cmd)
                 continue
 
             if run_LSF:
@@ -499,7 +499,7 @@ def main():
             if ctr % num_processes == 0:
                 os.system(cmd)
             else:
-                print cmd
+                print(cmd)
                 Popen(cmd, shell=True, executable=SHELL)
             
         

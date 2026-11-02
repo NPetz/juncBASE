@@ -40,7 +40,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -135,21 +135,21 @@ def main():
 
     weights = None
     if options.weights:
-        weights = map(float, options.weights.split(","))
+        weights = list(map(float, options.weights.split(",")))
 
         # Use R limma package
         try:
             r.library("limma")
         except:
-            print """In order to use weighted median, please install the limma package from Bioconductor: 
-                     http://www.bioconductor.org/packages/release/bioc/html/limma.html"""
-            print """In R:\nsource("http://bioconductor.org/biocLite.R")\nbiocLite("limma")"""
+            print("""In order to use weighted median, please install the limma package from Bioconductor: 
+                     http://www.bioconductor.org/packages/release/bioc/html/limma.html""")
+            print("""In R:\nsource("http://bioconductor.org/biocLite.R")\nbiocLite("limma")""")
 
     remove_from_median_idx = []
 
     weights = None
     if options.weights:
-        weights = map(float, options.weights.split(","))
+        weights = list(map(float, options.weights.split(",")))
 
     for line in input_file:
 
@@ -168,7 +168,7 @@ def main():
                 try:
                     idx = line_list[11:].index(sample)
                 except ValueError:       
-                    print "%s is not a sample.  Check --remove_from_median option." % sample
+                    print("%s is not a sample.  Check --remove_from_median option." % sample)
                     continue
 
                 if idx is not None: 
@@ -183,7 +183,7 @@ def main():
 
             if weights:
                 if len(weights) != len(line_list[11:])-1:
-                    print "Weights for every sample needs to be given"
+                    print("Weights for every sample needs to be given")
                     opt_parser.print_help()
 
 
@@ -256,7 +256,7 @@ def getMedianVirtualReferences(excl_incl_vals, total_thresh,
 
         elems = excl_incl_vals[i]
 
-        excl_count, incl_count = map(int, elems.split(";"))
+        excl_count, incl_count = list(map(int, elems.split(";")))
 
         total_count = excl_count + incl_count
     

@@ -35,7 +35,7 @@ class abstractmethod(object):
 
         Constructor.
         """
-	assert inspect.isfunction(func)
+        assert inspect.isfunction(func)
         self._func = func
 
     def __get__(self, obj, type):
@@ -72,7 +72,7 @@ class abstractmethod(object):
             """
             msg = "Abstract method %s of class %s called." % (
                     self._func.__name__, self._class.__name__)
-            raise TypeError, msg
+            raise TypeError(msg)
 #}>a
 
         def __get__(self, *args):
@@ -81,7 +81,7 @@ class abstractmethod(object):
     @staticmethod
     def main(*argv):
         "abstractmethod test program."
-        print abstractmethod.main.__doc__
+        print(abstractmethod.main.__doc__)
         
         class Test(object):
             def m(self):
@@ -94,17 +94,17 @@ class abstractmethod(object):
         test = Test()
         try:
             test.m()
-        except TypeError, msg:
-            print "Caught TypeError: %s" % str(msg)
+        except TypeError as msg:
+            print("Caught TypeError: %s" % str(msg))
         try:
             test.m2(57)
-        except TypeError, msg:
-            print "Caught TypeError: %s" % str(msg)
-        print inspect.ismethoddescriptor(test.m)
-        print inspect.isroutine(test.m)
+        except TypeError as msg:
+            print("Caught TypeError: %s" % str(msg))
+        print(inspect.ismethoddescriptor(test.m))
+        print(inspect.isroutine(test.m))
         b = test.m.__get__(None, None)
-        print inspect.ismethoddescriptor(b)
-        print inspect.isroutine(b)
+        print(inspect.ismethoddescriptor(b))
+        print(inspect.isroutine(b))
         return 0
 
 if __name__ == "__main__":

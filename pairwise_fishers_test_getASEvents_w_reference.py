@@ -48,7 +48,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -252,9 +252,9 @@ def main():
     try:
         input_file = open(in_prefix + "_AS_exclusion_inclusion_counts.txt")
     except:
-        print """Cannot find expected file %s_AS_exclusion_inclusion_counts.txt.
+        print("""Cannot find expected file %s_AS_exclusion_inclusion_counts.txt.
                  Please check that the same options is given from
-                 combine_createAS_CountTables""" % prefix
+                 combine_createAS_CountTables""" % prefix)
         opt_parser.print_help()
         sys.exit(1)
 
@@ -269,7 +269,7 @@ def main():
     left_input_file = None
     right_input_file = None
     if left_input_file_name is None:
-        print "Warning: No intron retention file given as input.  Will not calculate IR events."
+        print("Warning: No intron retention file given as input.  Will not calculate IR events.")
     else:
         left_input_file = open(left_input_file_name)
         right_input_file = open(right_input_file_name)
@@ -349,21 +349,21 @@ def main():
 
     weights = None
     if options.weights:
-        weights = map(float, options.weights.split(","))
+        weights = list(map(float, options.weights.split(",")))
 
         # Use R limma package
         try:
             r.library("limma")
         except:
-            print """In order to use weighted median, please install the limma package from Bioconductor: 
-                     http://www.bioconductor.org/packages/release/bioc/html/limma.html"""
-            print """In R:\nsource("http://bioconductor.org/biocLite.R")\nbiocLite("limma")"""
+            print("""In order to use weighted median, please install the limma package from Bioconductor: 
+                     http://www.bioconductor.org/packages/release/bioc/html/limma.html""")
+            print("""In R:\nsource("http://bioconductor.org/biocLite.R")\nbiocLite("limma")""")
 
     event_sum = open("%s_event_sum.txt" % out_prefix, "w")
 
     method = options.method
     if method != "BH" and method != "bonferroni":
-        print "Wrong method indicated."
+        print("Wrong method indicated.")
         opt_parser.print_help()
         sys.exit(1)
 
@@ -401,7 +401,7 @@ def main():
             total_samples = len(samples)
             if weights:
                 if len(weights) != total_samples-1:
-                    print "Weights for every sample needs to be given"
+                    print("Weights for every sample needs to be given")
                     opt_parser.print_help()
                     sys.exit(1)
 
@@ -429,7 +429,7 @@ def main():
             try:
                 lenNormalized_psis = lenNormalized_counts_event2PSIs[event]
             except:
-                print "Warning: Can't find event in lenNormalized psis: %s" % event
+                print("Warning: Can't find event in lenNormalized psis: %s" % event)
                 continue
 
         event_type = getEventType(event)
@@ -477,7 +477,7 @@ def main():
             continue
 
         # Do pairwise comparisons with first column
-        [col1_excl, col1_incl] = map(int,counts[0].split(";"))
+        [col1_excl, col1_incl] = list(map(int,counts[0].split(";")))
         if recalculate_ref_psi and has_virtual:
             # Need to also adjust relative counts based on new PSI
             col1_excl, col1_incl = adjustRefCounts(event,
@@ -492,7 +492,7 @@ def main():
             if j not in event_type2col2pvals[event_type]:
                 event_type2col2pvals[event_type][j] = []
 
-            [col2_excl, col2_incl] = map(int,counts[j].split(";"))
+            [col2_excl, col2_incl] = list(map(int,counts[j].split(";")))
 
             # Both samples have to be non-zero
             if belowThreshold(sum_thresh, col1_excl, col1_incl,
@@ -561,13 +561,13 @@ def main():
             try:
                 lenNormalized_left_psis = left_lenNormalized_counts_event2PSIs[event]
             except:
-                print "Warning: Could not find event in left_lenNormalized psis: %s" % event
+                print("Warning: Could not find event in left_lenNormalized psis: %s" % event)
                 continue
         if right_lenNormalized_counts_event2PSIs:
             try:
                 lenNormalized_right_psis = right_lenNormalized_counts_event2PSIs[event]
             except:
-                print "Warning: Could not find event in right_lenNormalized psis: %s" % event
+                print("Warning: Could not find event in right_lenNormalized psis: %s" % event)
                 continue
 
         # Fill PSI dict
@@ -621,8 +621,8 @@ def main():
 
             continue
 
-        [left_col1_excl, left_col1_incl] = map(int,left_events2counts[event][0].split(";"))
-        [right_col1_excl, right_col1_incl] = map(int,right_events2counts[event][0].split(";"))
+        [left_col1_excl, left_col1_incl] = list(map(int,left_events2counts[event][0].split(";")))
+        [right_col1_excl, right_col1_incl] = list(map(int,right_events2counts[event][0].split(";")))
 
 
         if left_col1_excl + left_col1_incl < sum_thresh:
@@ -650,8 +650,8 @@ def main():
 
         for j in range(1,total_samples):
 
-            [left_col2_excl, left_col2_incl] = map(int,left_events2counts[event][j].split(";"))
-            [right_col2_excl, right_col2_incl] = map(int,right_events2counts[event][j].split(";"))
+            [left_col2_excl, left_col2_incl] = list(map(int,left_events2counts[event][j].split(";")))
+            [right_col2_excl, right_col2_incl] = list(map(int,right_events2counts[event][j].split(";")))
 
             if j not in event_type2col2pvals["intron_retention"]:
                 event_type2col2pvals["intron_retention"][j] = []
@@ -842,7 +842,7 @@ def adjustRefCounts(event_str, jcn_seq_len, lengthNorm_total, ref_psi, excl, inc
         inclusion_isoform_len = getInclIsoformLen(event_str, jcn_seq_len)
 
     if not inclusion_isoform_len:
-        print "Error in obtaining isoform length from: %s" % event_str
+        print("Error in obtaining isoform length from: %s" % event_str)
         sys.exit(1)
 
     adj_incl = int(round((float(inclusion_isoform_len)/DEF_EXON_LEN_NORM) *
@@ -888,7 +888,7 @@ def buildDicts(lenNormalized_counts_file):
                 lenNormalized_counts_event2total_counts[event].append(NA)
                 continue
 
-            [excl, incl] = map(int,counts.split(";"))
+            [excl, incl] = list(map(int,counts.split(";")))
             total = excl + incl 
             if total == 0:
                 lenNormalized_counts_event2psis[event].append(NA)
@@ -905,7 +905,7 @@ def dPSI(psi_vals):
     maxPSI = -10.0
 
     if type(psi_vals) == type({}):
-        this_psi_vals = psi_vals.values()
+        this_psi_vals = list(psi_vals.values())
     else:
         this_psi_vals = list(psi_vals)
 

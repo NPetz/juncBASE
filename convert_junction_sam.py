@@ -115,7 +115,7 @@ def diffJunc(other_junc_format):
 usage = "usage: %s infile outfile overhang [--watsonJunctions]" % os.path.basename(sys.argv[0])
 
 if len( sys.argv ) < 4:
-    print usage
+    print(usage)
     sys.exit(1)
 else:
 #    print "There are %s args " %len( sys.argv )
@@ -167,22 +167,22 @@ else:
         words = lines.split()
         if "I" in words[5]:
             if not insertionFlag:
-                print "Not handling insertion alignments yet..."
+                print("Not handling insertion alignments yet...")
                 insertionFlag = True
             continue
         if "D" in words[5]:
             if not deletionFlag:
-                print "Not handling deletion alignments yet..."
+                print("Not handling deletion alignments yet...")
                 deletionFlag = True
             continue
         if "S" in words[5]:
             if not softFlag:
-                print "Not handling soft clipping alignments yet..."
+                print("Not handling soft clipping alignments yet...")
                 softFlag = True
             continue
         if "H" in words[5]:
             if not hardFlag:
-                print "Not handling hard clipping alignments yet..."
+                print("Not handling hard clipping alignments yet...")
                 hardFlag = True
             continue
 
@@ -210,7 +210,7 @@ else:
                 for field in remaining_fields:
                     tag, type, val = field.split(":")
                     if tag not in KNOWN_TAGS:
-                        print "ERROR: Unknown tag: %s" % tag
+                        print("ERROR: Unknown tag: %s" % tag)
                         sys.exit(1)
                     if tag == "XA" or tag == "XM" or tag == "NM" or tag == "NH":
                         new_fields.append(field)
@@ -238,7 +238,7 @@ else:
                 fout.write(lines + "\n")
                 break
         else:
-            print "SAM file needs at least 11 fields."
+            print("SAM file needs at least 11 fields.")
             sys.exit(1)
 
     fin.close()

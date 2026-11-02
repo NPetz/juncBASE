@@ -20,7 +20,7 @@ from subprocess import Popen
 BIN_DIR = os.path.realpath(os.path.dirname(sys.argv[0]))
 SCRIPT = "%s/buildVirtualReference_median.py" % BIN_DIR
 if not os.path.exists(SCRIPT):
-    print "ERROR: buildVirtualReference_median.py needs to be in the same directory."
+    print("ERROR: buildVirtualReference_median.py needs to be in the same directory.")
     sys.exit(1)
 
 DEF_THRESH = 25
@@ -46,7 +46,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -137,13 +137,13 @@ def main():
 
         if ctr % num_processes == 0:
             os.system(cmd)
-            print cmd
+            print(cmd)
         else:
-            print cmd
+            print(cmd)
             Popen(cmd, shell=True, executable=SHELL) 
 
     # Print out the prefix that should be used as a reminder
-    print "Output files were created with the following prefix: %s" % out_prefix
+    print("Output files were created with the following prefix: %s" % out_prefix)
 			
     sys.exit(0)
 

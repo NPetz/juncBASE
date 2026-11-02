@@ -276,13 +276,13 @@ class LinkedList(object):
     @staticmethod
     def main(*argv):
         "LinkedList test program."
-        print LinkedList.main.__doc__
+        print(LinkedList.main.__doc__)
         l1 = LinkedList()
         l1.append(57)
         l1.append("hello")
         l1.append(None)
-        print l1
-        print "isEmpty returns %s" % (l1.isEmpty)
+        print(l1)
+        print("isEmpty returns %s" % (l1.isEmpty))
         return 0
 
 if __name__ == "__main__":

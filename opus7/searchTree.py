@@ -56,35 +56,35 @@ class SearchTree(Tree, SearchableContainer):
     @staticmethod
     def test(tree):
         "SearchTree test program."
-        for i in xrange(1, 8):
+        for i in range(1, 8):
             tree.insert(i)
         visitor = PrintingVisitor()
-        print tree
-        print "Breadth-first traversal"
+        print(tree)
+        print("Breadth-first traversal")
         tree.breadthFirstTraversal(visitor)
         visitor.finish()
-        print "Preorder traversal"
+        print("Preorder traversal")
         tree.depthFirstTraversal(PreOrder(visitor))
         visitor.finish()
-        print "Inorder traversal"
+        print("Inorder traversal")
         tree.depthFirstTraversal(InOrder(visitor))
         visitor.finish()
-        print "Postorder traversal"
+        print("Postorder traversal")
         tree.depthFirstTraversal(PostOrder(visitor))
         visitor.finish()
-        print "Using iterator"
+        print("Using iterator")
         for i in tree:
-            print i
-        print "Using depth-first generator"
+            print(i)
+        print("Using depth-first generator")
         for i in tree.depthFirstGenerator(Tree.INORDER):
-            print i
-        print "Using breadth-first generator"
+            print(i)
+        print("Using breadth-first generator")
         for i in tree.breadthFirstGenerator():
-            print i
-        print "Withdrawing 4"
+            print(i)
+        print("Withdrawing 4")
         obj = tree.find(4)
         try:
             tree.withdraw(obj)
-            print tree
+            print(tree)
         except NotImplementedError:
-            print "Withdraw not implemented."
+            print("Withdraw not implemented.")

@@ -26,7 +26,7 @@ DEF_CONFIDENCE = 3
 BIN_DIR = os.path.realpath(os.path.dirname(sys.argv[0]))
 IE_SCRIPT = "%s/intron_exon_jctn_counts.py" % BIN_DIR
 if not os.path.exists(IE_SCRIPT):
-    print "ERROR: intron_exon_jctn_counts.py needs to be in the same directory."
+    print("ERROR: intron_exon_jctn_counts.py needs to be in the same directory.")
     sys.exit(1)
 SHELL = "/bin/tcsh"
 #################
@@ -48,7 +48,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -161,7 +161,7 @@ def main():
     if os.path.exists(input_dir):
         input_dir = os.path.abspath(options.input_dir)
     else:
-        print "Error. Input directory does not exists: %s" % input_dir
+        print("Error. Input directory does not exists: %s" % input_dir)
         opt_parser.print_help()
         sys.exit(1)
 
@@ -169,7 +169,7 @@ def main():
         input_dir += "/"
 
     if not os.path.exists(input_dir + samp):
-        print "Expected path does not exist: %s" % (input_dir + samp)
+        print("Expected path does not exist: %s" % (input_dir + samp))
         opt_parser.print_help()
         sys.exit(1)
 
@@ -188,7 +188,7 @@ def main():
             paired_read_set = update_len2readFile(len2readFile, readFile2handle, 
                                                   input_dir, samp, paired_genome_file_name, True)
         else:
-            print "Cannot find paired end file: %s" % paired_genome_file_name
+            print("Cannot find paired end file: %s" % paired_genome_file_name)
             sys.exit(1)
 
     if single_reads:
@@ -200,12 +200,12 @@ def main():
 
     if forced_read_len:
         if len(len2readFile) > 1:
-            print "More than one read length in reads."
+            print("More than one read length in reads.")
             opt_parser.print_help()    
             sys.exit(1)
-        if forced_read_len != len2readFile.keys()[0]:
-            print "Read length in file (%d) does not match specified read length (%d)." % (len2readFile.keys()[0],
-                                                                                           forced_read_len)
+        if forced_read_len != list(len2readFile.keys())[0]:
+            print("Read length in file (%d) does not match specified read length (%d)." % (list(len2readFile.keys())[0],
+                                                                                           forced_read_len))
             opt_parser.print_help()    
             sys.exit(1)
 
@@ -224,11 +224,11 @@ def main():
         os.system(cmd)
 
     # Combine all count files into one sum (*_intron_exon_junction_counts.txt)
-    all_introns = combineCounts(input_dir, len2readFile.keys(), samp)
+    all_introns = combineCounts(input_dir, list(len2readFile.keys()), samp)
     
     # Find paired reads and create file associating paired reads.
     if paired_reads:
-        make_paired_end_ie_junctions2qname(all_introns, input_dir, len2readFile.keys(),
+        make_paired_end_ie_junctions2qname(all_introns, input_dir, list(len2readFile.keys()),
                                            min_overhang, samp, paired_read_set)
 
 
@@ -298,7 +298,7 @@ def combineCounts(input_dir, read_lengths, samp):
 
     new_count_file.close()
 
-    return intron2counts.keys()
+    return list(intron2counts.keys())
 
 def formatLine(line):
     line = line.replace("\r","")

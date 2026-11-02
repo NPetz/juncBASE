@@ -39,7 +39,7 @@ class OptionParser(optparse.OptionParser):
 
         # Assumes the option's 'default' is set to None!
         if getattr(self.values, option.dest) is None:
-            print "%s option not supplied" % option
+            print("%s option not supplied" % option)
             self.print_help()
             sys.exit(1)
 
@@ -51,10 +51,10 @@ class CommentedFile:
     def __init__(self, f, commentstring="#"):
         self.f = f
         self.commentstring = commentstring
-    def next(self):
-        line = self.f.next()
+    def __next__(self):
+        line = next(self.f)
         while line.startswith(self.commentstring):
-            line = self.f.next()
+            line = next(self.f)
         return line
     def __iter__(self):
         return self
@@ -124,12 +124,12 @@ def median(vals):
 def runCmd(cmd_str, which_shell, pCommand=False):
     try:
         if pCommand:
-            print cmd_str
+            print(cmd_str)
 
         p = Popen(cmd_str, shell=True, executable=which_shell)
         sts = os.waitpid(p.pid,0)
     except:
-        print "Something wrong with: %s" % cmd_str
+        print("Something wrong with: %s" % cmd_str)
         sys.exit(1)
         
 def getShannonIndex(pos2countDict, totalCount):

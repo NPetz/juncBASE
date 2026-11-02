@@ -190,7 +190,7 @@ class AVLTree(BinarySearchTree):
     @staticmethod
     def main(*argv):
         "AVLTree test program."
-        print AVLTree.main.__doc__
+        print(AVLTree.main.__doc__)
         tree = AVLTree()
         SearchTree.test(tree)
         return 0
